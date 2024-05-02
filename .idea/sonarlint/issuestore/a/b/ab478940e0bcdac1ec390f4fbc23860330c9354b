@@ -1,0 +1,75 @@
+
+¡
+java:S1192€"dDefine a constant instead of duplicating this literal "ê´€ë¦¬ í•­ëª©ì„ ì„ íƒí•˜ì„¸ìš”..." 3 times.(óö³J$3f80d87c-cd42-427b-b160-6bcec0941370
+Ğ
+java:S1598"This file "CampManagementApplication.java" should be located in "camp" directory, not in "D:\sparta\Github\campManagement\campManagement\src".( İ‚êøÿÿÿÿJ$717bf919-97e6-4c97-ad4f-f08ce93cbe98
+œ
+java:S3008"aRename this field "SUBJECT_TYPE_MANDATORY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦…¬J$6709ede0-7d0d-43c6-9ace-f7f160e608b3
+Ÿ
+java:S3008"^Rename this field "SUBJECT_TYPE_CHOICE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(§¶ş¿úÿÿÿÿJ$f12fbabf-5fdc-47b9-b9a7-036f6d120f64
+š
+java:S1450"YRemove the "scoreStore" field and declare it as a local variable in the relevant methods.(”şÀ­üÿÿÿÿJ$3243f45a-617d-48ac-85fb-1f1a34778e81
+—
+java:S1450"[Remove the "studentStore" field and declare it as a local variable in the relevant methods.(×³Ö§J$fcc0935e-23be-49b3-a998-1bebe4f5568e
+œ
+java:S1450"[Remove the "subjectStore" field and declare it as a local variable in the relevant methods.(«ß©îúÿÿÿÿJ$a4742d6e-3188-4f18-90d9-59ead3523a15
+š
+java:S2142,"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(”ı¾J$db70f0b4-5cf0-484e-997c-d979d90319ed
+f	java:S106-"+Replace this use of System.out by a logger.(àøâÑJ$161db6c5-60f4-4ac5-8c24-06e29a384109
+k	java:S106{"+Replace this use of System.out by a logger.(ƒ¬ê€ÿÿÿÿÿJ$ee351680-f25c-4742-9d41-9ec04e59dc53
+k	java:S106|"+Replace this use of System.out by a logger.(êÀÔÿÿÿÿÿJ$e0b7d4a3-4a90-4a8e-8c3c-1df1e5e52171
+k	java:S106}"+Replace this use of System.out by a logger.(ÒÅ·ÿÿÿÿÿJ$6c034070-68e8-4a9b-9656-2cb3dec7c775
+f	java:S106~"+Replace this use of System.out by a logger.(çİÌJ$4e3c7b10-3c9f-41f3-b2f6-d6648ae35f82
+e	java:S106"+Replace this use of System.out by a logger.(ÑÜìiJ$b3daf9dd-b976-467e-ba6e-38d848b605b0
+g	java:S106€"+Replace this use of System.out by a logger.(óö³J$30728337-2f5b-4495-9407-94c748f0a017
+l	java:S106ˆ"+Replace this use of System.out by a logger.(ìø ”øÿÿÿÿJ$06cca7de-73a7-45b6-a5de-3d9a43265fe5
+l	java:S106"+Replace this use of System.out by a logger.(Ùİ–±úÿÿÿÿJ$8bb66d93-a5e9-4e7a-b8c7-fb79b03a9472
+g	java:S106“"+Replace this use of System.out by a logger.(ÄºÎ”J$14919256-ff14-405e-aa28-d9f323641dcd
+l	java:S106”"+Replace this use of System.out by a logger.(†™ŸöøÿÿÿÿJ$9459f67f-0de1-4a02-8c86-d5b9be652326
+l	java:S106•"+Replace this use of System.out by a logger.(´şÜçüÿÿÿÿJ$8f7d585a-dbcb-4556-8eb5-b07f65542e02
+l	java:S106–"+Replace this use of System.out by a logger.(Èìı¨ûÿÿÿÿJ$68250e01-c479-4705-8d9a-1c18912c5c0f
+l	java:S106—"+Replace this use of System.out by a logger.(úäú¡úÿÿÿÿJ$b64ea746-3d5a-4ac3-8739-576083d09c2f
+g	java:S106˜"+Replace this use of System.out by a logger.(óö³J$55333358-b438-42c1-b0f9-f54a29d6b2d3
+g	java:S106 "+Replace this use of System.out by a logger.(Ó†’âJ$2b98dcca-7bdb-48b4-9dcd-e5586dc1bece
+}
+java:S1854®";Remove this useless assignment to local variable "student".(œ‡ˆùÿÿÿÿJ$38eebca2-f0d9-4ccc-87cb-3f0e819f1b81
+l	java:S106©"+Replace this use of System.out by a logger.(¢àùùıÿÿÿÿJ$babb5ecb-71c0-4a43-acaa-46e087050806
+g	java:S106ª"+Replace this use of System.out by a logger.(ŠÓˆÒJ$8cb8d458-dd32-450a-92b4-bd4250d9fac8
+n
+java:S1481®",Remove this unused "student" local variable.(œ‡ˆùÿÿÿÿJ$8796190a-4516-4ecd-ac21-2f2de3200fc7
+g	java:S106°"+Replace this use of System.out by a logger.(ûË¼J$4f419535-3a76-4fc8-b45e-3719e39815ba
+l	java:S106µ"+Replace this use of System.out by a logger.(Å‚ÎŸıÿÿÿÿJ$f022983f-590a-42bd-8286-197bbf42c8ce
+g	java:S106·"+Replace this use of System.out by a logger.(…´„œJ$2ef91eac-cbcf-418b-b3dc-46d40a2308b3
+g	java:S106½"+Replace this use of System.out by a logger.(ÄºÎ”J$90561d7a-26ef-4ed1-8977-9326257f110d
+g	java:S106¾"+Replace this use of System.out by a logger.(¾çJ$bc790629-37b2-4ec7-96c3-174b29e0ee56
+f	java:S106¿"+Replace this use of System.out by a logger.(Ô³ñXJ$d21623e5-aad2-4c5b-abbf-2acfdf65baa9
+g	java:S106À"+Replace this use of System.out by a logger.(€ƒ„³J$cf0a9a4b-c86d-4551-9b6c-cd76d0641e7b
+g	java:S106Á"+Replace this use of System.out by a logger.(úğ×“J$5ec6c0d5-5a77-409e-a03d-3f3d3ef32ced
+g	java:S106Â"+Replace this use of System.out by a logger.(—¢Ô÷J$bd58ce73-12a5-4b31-a50e-83d92cfb2d80
+g	java:S106Ã"+Replace this use of System.out by a logger.(óö³J$afc64d5a-6cbd-4709-8c51-5386c5d8e227
+g	java:S106Ì"+Replace this use of System.out by a logger.(Ó†’âJ$ce5d5964-e4ad-47b1-93e0-50c34db3bc53
+l	java:S106Ô"+Replace this use of System.out by a logger.(¸²«üÿÿÿÿJ$2d27dde1-a8b4-4308-b940-590a098c7491
+z
+java:S1854Ú"=Remove this useless assignment to local variable "studentId".( îÈJ$f603d888-13b9-4140-8c84-e29ceb61e839
+k
+java:S1481Ú".Remove this unused "studentId" local variable.( îÈJ$c249a8f6-f1cd-46c3-9403-38ae70d8f6fe
+l	java:S106Û"+Replace this use of System.out by a logger.(¨â–ïøÿÿÿÿJ$46808682-2624-4989-af97-543f5c3ce08b
+g	java:S106İ"+Replace this use of System.out by a logger.(©¤ıÁJ$b1d21401-b97a-4507-9bd7-c8d3b1ad5af3
+z
+java:S1854â"=Remove this useless assignment to local variable "studentId".( îÈJ$3e536ba9-26a8-4982-aa69-beee5bb4a883
+k
+java:S1481â".Remove this unused "studentId" local variable.( îÈJ$44da50aa-0561-4468-9225-ef59c971f6f2
+g	java:S106ä"+Replace this use of System.out by a logger.(ÈÉ¦èJ$da4a5fb4-1836-4857-8098-9700a7731466
+l	java:S106æ"+Replace this use of System.out by a logger.(ˆ¨‹¤ÿÿÿÿÿJ$9e0e649f-0e41-4c68-8680-a1b3d47d6492
+z
+java:S1854ë"=Remove this useless assignment to local variable "studentId".( îÈJ$21d43e7a-513b-4b1e-b6ba-002428c003b0
+k
+java:S1481ë".Remove this unused "studentId" local variable.( îÈJ$885ec223-4dad-434c-8018-4d538cd546ad
+g	java:S106í"+Replace this use of System.out by a logger.(ÁÇ J$8b867b44-3adb-4553-976e-a688cc929aa1
+g	java:S106ï"+Replace this use of System.out by a logger.(±ÈµÇJ$341d983b-ee29-4139-b328-f64727e20578
+l
+java:S1068"0Remove this unused "studentStore" private field.(×³Ö§J$69fb98c2-a53e-4ffe-a573-182c9a06101e
+q
+java:S1068"0Remove this unused "subjectStore" private field.(«ß©îúÿÿÿÿJ$5b508d3d-4941-4111-b6dd-75c02e2a14a3
+o
+java:S1068".Remove this unused "scoreStore" private field.(”şÀ­üÿÿÿÿJ$d7f10cb1-56b7-4af3-912a-837dfce45ab8
