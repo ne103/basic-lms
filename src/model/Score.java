@@ -1,6 +1,6 @@
-package camp.model;
-
+package model;
 public class Score {
+
     private String scoreId;
 
     public Score(String seq) {

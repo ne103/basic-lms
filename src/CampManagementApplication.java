@@ -1,8 +1,7 @@
-package camp;
 
-import camp.model.Score;
-import camp.model.Student;
-import camp.model.Subject;
+import model.Score;
+import model.Student;
+import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class CampManagementApplication {
     // 초기 데이터 생성
     private static void setInitData() {
         studentStore = new ArrayList<>();
-        subjectStore = List.of(
+   /*     subjectStore = List.of(
                 new Subject(
                         sequence(INDEX_TYPE_SUBJECT),
                         "Java",
@@ -95,7 +94,7 @@ public class CampManagementApplication {
                         "MongoDB",
                         SUBJECT_TYPE_CHOICE
                 )
-        );
+        );*/
         scoreStore = new ArrayList<>();
     }
 
