@@ -1,15 +1,52 @@
 package model;
+
 public class Score {
+    private final int id;
+    private final int subjectId;
+    private final int studentId;
+    private int round;
+    private int score;
+    private String grade;
 
-    private String scoreId;
-
-    public Score(String seq) {
-        this.scoreId = seq;
+    public Score(int id, Subject subject, int studentId, int round, int score, String grade) {
+        this.id = id;
+        this.subjectId = subject.getId();
+        this.studentId = studentId;
+        this.round = round;
+        this.score = score;
+        this.grade = grade;
     }
 
-    // Getter
-    public String getScoreId() {
-        return scoreId;
+    public int getId() {
+        return id;
     }
 
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
+
