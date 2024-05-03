@@ -20,6 +20,7 @@ import java.util.Scanner;
 
 /*
  * 최대한 객체지향적이게 설계해보려고 노력했습니다.
+ * 더 좋은 방법이 있다면 언제든 말씀해주세요!
  * 모델 및 레포지토리 클래스들에서 필요한 함수들을 적절하게 구현해서 완성해주시면 될 것 같습니다!
  * 전체적인 틀에 대해 궁금하신 점이나 이상한게 있다면 꼭 말씀해주세요!
  * */
@@ -32,6 +33,10 @@ public class CampManagementApplication {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        // 더미 데이터 입력
+        studentRepository.setTestData();
+        scoreRepository.setTestData();
+
         try {
             displayMainView();
         } catch (Exception e) {

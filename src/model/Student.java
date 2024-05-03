@@ -20,4 +20,8 @@ public class Student {
     public String getName() {
         return name;
     }
+
+    public ArrayList<Subject> getSubjectList() {
+        return subjectList;
+    }
 }

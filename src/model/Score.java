@@ -8,13 +8,12 @@ public class Score {
     private int score;
     private String grade;
 
-    public Score(int id, Subject subject, int studentId, int round, int score, String grade) {
+    public Score(int id, Subject subject, int studentId, int round, int score) {
         this.id = id;
         this.subjectId = subject.getId();
         this.studentId = studentId;
         this.round = round;
         this.score = score;
-        this.grade = grade;
     }
 
     public int getId() {
