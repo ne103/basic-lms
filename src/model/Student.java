@@ -1,21 +1,27 @@
-package camp.model;
+package model;
+
+import java.util.ArrayList;
 
 public class Student {
-    private String studentId;
-    private String studentName;
+    private final int id;
+    private String name;
+    private ArrayList<Subject> subjectList;
 
-    public Student(String seq, String studentName) {
-        this.studentId = seq;
-        this.studentName = studentName;
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.subjectList = new ArrayList<>();
     }
 
-    // Getter
-    public String getStudentId() {
-        return studentId;
+    public int getId() {
+        return id;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getName() {
+        return name;
     }
 
+    public ArrayList<Subject> getSubjectList() {
+        return subjectList;
+    }
 }
