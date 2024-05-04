@@ -10,12 +10,37 @@ public class ScoreRepository {
     private static int index = 0;
     /*
      * create
-     * 수강생의 과목별 시험 회차 및 점수를 등록할 수 있습니다.
-     * 등록하려는 과목의 회차 점수가 이미 등록되어 있다면 등록할 수 없습니다. 과목의 회차 점수가 중복되어 등록될 수 없습니다. (학생id, 과목id가 같은 값들 조회해야함)
-     * 회차 또한 10회까지
-     * 점수를 등록하면 자동으로 등급이 추가 저장됩니다. (점수별 등급 지정해주는 함수 필요)
+     * 학생id, 과목, 회차, 점수를 받아서 store에 추가합니다.
      * */
+    public void create(int studentId, Subject subject, int round, int score){
+        Score scoreInstance = new Score(++index, subject, studentId, round, score);
+        store.add(scoreInstance);
+        System.out.println("점수 등록 성공");
+    }
 
+    /*
+    * 과목id와 학생id를 통해서 학생의 해당 과목의 회차리스트를 반환합니다.
+    * ex) 김준현 학생의 JAVA 과목 회차들 (1,2,3,4,5회차)를 반환*/
+    public ArrayList<Score> findByIds(int subjectId, int studentId){
+        ArrayList<Score> list = new ArrayList<>();
+        for (Score score : store) {
+            if (score.getStudentId() == studentId && score.getSubjectId() == subjectId){
+                list.add(score);
+            }
+        }
+        return list;
+    }
+
+    /*
+    * 회차가 존재하는지 판별합니다.*/
+    public boolean checkRoundIsExist(ArrayList<Score> scoreArrayList, int round){
+        for (Score score : scoreArrayList) {
+            if (score.getRound() == round){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     /*read
