@@ -17,10 +17,23 @@ public class StudentRepository {
      * 조건: 수강생의 고유번호는 중복될 수 없습니다.
      * */
 
+    //수강생 등록
+    public void storeStudent(Student student) {
+            store.add(student);
+    }
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
+    //임시
+    public void printStudent() {
+        for (Student student : store) {
+            System.out.println("ID: "+student.getId());
+            System.out.println("NAME: "+student.getName());
+            System.out.println("SUBJECT: "+student.getSubjectList());
+            System.out.println();
+        }
 
+    }
 
 
     // ---------------------- 선택 -----------------------------

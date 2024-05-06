@@ -24,4 +24,11 @@ public class Student {
     public ArrayList<Subject> getSubjectList() {
         return subjectList;
     }
+
+
+    public void setSubjectList(ArrayList<Subject> subjectList) {
+        this.subjectList = subjectList;
+    }
+
+
 }

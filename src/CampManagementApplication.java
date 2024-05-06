@@ -5,6 +5,7 @@ import model.Subject;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,6 +29,8 @@ public class CampManagementApplication {
     // 데이터 저장소
     private static StudentRepository studentRepository = new StudentRepository();
     private static ScoreRepository scoreRepository = new ScoreRepository();
+
+    private static int studentIndex;
 
     // 스캐너
     private static Scanner sc = new Scanner(System.in);
@@ -96,8 +99,47 @@ public class CampManagementApplication {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
-        // 기능 구현 (필수 과목, 선택 과목)
-        // 기능 구현
+        //버퍼에서 \n값 빼기
+        sc.nextLine();
+        //학생 객체 생성
+        Student student = new Student(studentIndex++,studentName);
+        boolean success = false;
+        //요건을 충족하는 과목을 선택할때 까지 반복
+        while(!success) {
+            //과목 선택
+            System.out.println("3개 이상의 필수 과목, 2개 이상의 선택 과목 선택");
+            System.out.println("필수 과목 : JAVA, OOP, SPRING, JPA, MYSQL");
+            System.out.println("선택 과목 : DEGINE_PATTERN, SPRING_SECURITY, REFIS, MONGODB");
+            System.out.print("과목 입력: ");
+            String[] subject = sc.nextLine().split(" ");
+            //임시 리스트에 선택한 과목을 추가 및 필수,선택 과목 개수 세기
+            ArrayList<Subject> subjectList = new ArrayList<>();
+            int essential=0;
+            int select=0;
+            for (String s : subject) {
+                switch (s) {
+                    case "JAVA" -> {subjectList.add(Subject.JAVA); essential++;}
+                    case "OOP" -> {subjectList.add(Subject.OOP); essential++;}
+                    case "SPRING" -> {subjectList.add(Subject.SPRING); essential++;}
+                    case "JPA" -> {subjectList.add(Subject.JPA); essential++;}
+                    case "MYSQL" -> {subjectList.add(Subject.MYSQL); essential++;}
+                    case "DEGINE_PATTERN" -> {subjectList.add(Subject.DEGINE_PATTERN); select++;}
+                    case "SPRING_SECURITY" -> {subjectList.add(Subject.SPRING_SECURITY); select++;}
+                    case "REFIS" -> {subjectList.add(Subject.REDIS); select++;}
+                    case "MONGODB" -> {subjectList.add(Subject.MONGODB); select++;}
+                }
+            }
+            //요건 충족 확인
+            if (essential >= 3 && select >= 2) {
+                success = true;
+                student.setSubjectList(subjectList);
+            } else {
+                System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
+            }
+
+        }
+        //저장소에 학생 등록
+        studentRepository.storeStudent(student);
         System.out.println("수강생 등록 성공!\n");
     }
 
@@ -105,6 +147,7 @@ public class CampManagementApplication {
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
+        studentRepository.printStudent();
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -155,5 +198,7 @@ public class CampManagementApplication {
         // 기능 구현
         System.out.println("\n등급 조회 성공!");
     }
+
+
 
 }
