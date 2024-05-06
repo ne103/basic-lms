@@ -22,6 +22,18 @@ public class StudentRepository {
      * 수강생 목록을 조회할 수 있습니다*/
 
 
+    // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
+    // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
+    public static Student findById(int id){
+        for (Student student : store) {
+            if(student.getId() == id) {
+                return student;
+            }
+        }
+        return null; // null이면 실패
+    }
+
+
 
     // ---------------------- 선택 -----------------------------
     /*read

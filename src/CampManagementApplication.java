@@ -135,9 +135,53 @@ public class CampManagementApplication {
 
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
-        System.out.println("시험 점수를 등록합니다...");
-        // 기능 구현
-        System.out.println("\n점수 등록 성공!");
+        // 학생 id 입력 및 존재 확인
+        System.out.print("관리할 학생의 id를 입력하세요: ");
+        int studentId = sc.nextInt();
+        sc.nextLine();
+        Student student = StudentRepository.findById(studentId);
+        if (student == null){
+            System.out.println(studentId + "번 학생은 존재하지 않습니다.");
+            return;
+        }
+
+        // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
+        System.out.print(student.getName()+" 학생의 추가할 점수의 과목 id를 입력하세요: ");
+        int subjectId = sc.nextInt();
+        sc.nextLine();
+        Subject subject = Subject.findById(subjectId);
+        if(subject == null){
+            System.out.println("존재하지 않는 과목 id 입니다.");
+            return;
+        }
+        if(!student.checkSubjectExist(subject)){
+            System.out.println("이 학생은 해당 과목을 수강하지 않았습니다.");
+            return;
+        }
+
+        // 회차 입력 및 회차범위, 이미 존재여부 확인
+        System.out.print(student.getName() + " 학생의 " + subject.name() + " 과목의 회차를 입력하세요:");
+        int round = sc.nextInt();
+        sc.nextLine();
+        if (round < 1 || round > 10 ){
+            System.out.println("회차는 1~10까지만 존재합니다.");
+            return;
+        }
+        ArrayList<Score> scoreList = scoreRepository.findByIds(subjectId, studentId);
+        if(scoreRepository.checkRoundIsExist(scoreList, round)){
+            System.out.println("이미 존재하는 회차입니다. 등록할 수 없습니다.");
+            return;
+        }
+
+        System.out.print("등록할 점수를 입력해주세요: ");
+        int score = sc.nextInt();
+        sc.nextLine();
+        if (score < 0 || score > 100){
+            System.out.println("잘못된 점수입니다.");
+            return;
+        }
+
+        scoreRepository.create(studentId,subject,round,score);
     }
 
     // 수강생의 과목별 회차 점수 수정

@@ -14,6 +14,7 @@ public class Score {
         this.studentId = studentId;
         this.round = round;
         this.score = score;
+        this.grade = scoreToGrade(subjectId, score);
     }
 
     public int getId() {
@@ -46,6 +47,47 @@ public class Score {
 
     public void setScore(int score) {
         this.score = score;
+        this.grade = scoreToGrade(subjectId, score);
     }
+
+    /*
+    * 등급 산정하는 함수
+    * score가 변동이 있을때 실행되어야 합니다.*/
+    private String scoreToGrade(int subjectId, int score){
+        Subject subject = Subject.findById(subjectId);
+        if (subject == null) {
+            throw new IllegalArgumentException();// 예외처리?
+        }
+        if (subject.isEssential()) {
+            if (score >= 95){
+                return "A";
+            } else if(score >= 90){
+                return "B";
+            } else if (score >= 80) {
+                return "C";
+            } else if (score >= 70) {
+                return "D";
+            } else if (score >= 60) {
+                return "F";
+            } else {
+                return "N";
+            }
+        } else {
+            if (score >= 90){
+                return "A";
+            } else if(score >= 80){
+                return "B";
+            } else if (score >= 70) {
+                return "C";
+            } else if (score >= 60) {
+                return "D";
+            } else if (score >= 50) {
+                return "F";
+            } else {
+                return "N";
+            }
+        }
+    }
+
 }
 
