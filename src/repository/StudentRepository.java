@@ -24,16 +24,7 @@ public class StudentRepository {
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
-    //임시
-    public void printStudent() {
-        for (Student student : store) {
-            System.out.println("ID: "+student.getId());
-            System.out.println("NAME: "+student.getName());
-            System.out.println("SUBJECT: "+student.getSubjectList());
-            System.out.println();
-        }
 
-    }
 
 
     // ---------------------- 선택 -----------------------------

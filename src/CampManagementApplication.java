@@ -110,7 +110,7 @@ public class CampManagementApplication {
             System.out.println("3개 이상의 필수 과목, 2개 이상의 선택 과목 선택");
             System.out.println("필수 과목 : JAVA, OOP, SPRING, JPA, MYSQL");
             System.out.println("선택 과목 : DEGINE_PATTERN, SPRING_SECURITY, REFIS, MONGODB");
-            System.out.print("과목 입력: ");
+            System.out.print("선택할 과목 입력(대문자): ");
             String[] subject = sc.nextLine().split(" ");
             //임시 리스트에 선택한 과목을 추가 및 필수,선택 과목 개수 세기
             ArrayList<Subject> subjectList = new ArrayList<>();
@@ -147,7 +147,6 @@ public class CampManagementApplication {
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
-        studentRepository.printStudent();
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
