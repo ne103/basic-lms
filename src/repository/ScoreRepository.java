@@ -4,6 +4,7 @@ import model.Score;
 import model.Subject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ScoreRepository {
     private static ArrayList<Score> store = new ArrayList<>(); // Map으로도 관리할 수 있음
@@ -45,10 +46,20 @@ public class ScoreRepository {
 
     /*read
      * 수강생 등급을 조회할 수 있습니다*/
-
+    // 수강생의 수정할 과목의 회차의 점수 조회
+    public Score readScore(int subjectId, int studentId, int round) {
+        return store.stream().filter(o -> o.getSubjectId() == subjectId)
+                             .filter(o -> o.getStudentId() == studentId)
+                             .filter(o -> o.getRound() == round)
+                             .findFirst()
+                             .orElse(null);
+    }
 
     /*update
      * 수강생의 과목별 회차점수를 수정할 수 있습니다.*/
+    public void update(int id, int updateScore) {
+        store.stream().filter(o -> o.getId() == id).findFirst().ifPresent(score -> score.setScore(updateScore));
+    }
 
 
 

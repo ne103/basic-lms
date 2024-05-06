@@ -6,7 +6,7 @@ import repository.ScoreRepository;
 import repository.StudentRepository;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -108,7 +108,7 @@ public class CampManagementApplication {
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
-    private static void displayScoreView() {
+    private static void displayScoreView() throws InterruptedException {
         boolean flag = true;
         while (flag) {
             System.out.println("==================================");
@@ -139,7 +139,7 @@ public class CampManagementApplication {
         System.out.print("관리할 학생의 id를 입력하세요: ");
         int studentId = sc.nextInt();
         sc.nextLine();
-        Student student = StudentRepository.findById(studentId);
+        Student student = studentRepository.findById(studentId);
         if (student == null){
             System.out.println(studentId + "번 학생은 존재하지 않습니다.");
             return;
@@ -185,11 +185,77 @@ public class CampManagementApplication {
     }
 
     // 수강생의 과목별 회차 점수 수정
-    private static void updateRoundScoreBySubject() {
+    private static void updateRoundScoreBySubject() throws InterruptedException {
         // 기능 구현 (수정할 과목 및 회차, 점수)
+        System.out.println("==================================");
         System.out.println("시험 점수를 수정합니다...");
+
+        // 수강생 고유번호 입력
+        System.out.print("수강생 고유번호를 입력해주세요...");
+        int id = sc.nextInt();
+        sc.nextLine(); // 엔터 입력 시 엔터 자체를 입력으로 받아들여 다음 실행될 구문이 씹히는 것을 방지
+
+        Student student = studentRepository.findById(id);
+
+        if (student != null) {
+
+            // 수정할 과목ID 입력
+            System.out.print("수정할 과목의 ID를 입력해주세요...");
+            for (Subject subject : Subject.values()) {
+                System.out.print(" " + subject.getId() + ". " + subject); // 반복문으로 enum에 저장된 값 출력
+            }
+            System.out.print("...");
+            int subjectId = sc.nextInt();
+            sc.nextLine();
+
+            ArrayList<Subject> subjectList = student.getSubjectList();
+            // Subject에 입력한 과목id 비교 - anyMatch() : 하나라도 존재하는것이 있으면 true, 아니면 false
+            if (subjectList.stream().anyMatch(o -> o.getId() == id)) {
+                // 수정할 회차 입력
+                System.out.print("수정할 회차(1~10)를 입력해주세요...");
+                int round = sc.nextInt();
+                sc.nextLine();
+
+                Score score = scoreRepository.readScore(subjectId, id, round);
+                if (score != null) {
+                    System.out.println("과목 : " + Subject.findById(score.getSubjectId()));
+                    System.out.println("회차 : " + score.getRound() + "회차");
+                    System.out.println("점수 : " + score.getScore() + "점");
+                    System.out.print("수정할 점수를 입력해주세요...");
+                    int updateScore = sc.nextInt();
+                    sc.nextLine();
+                    if (updateScore >= 0 && updateScore <= 100) {
+                        scoreRepository.update(score.getId(), updateScore);
+                    } else {
+                        System.out.println("점수는 0부터 100까지 입력 가능합니다...");
+                        System.out.println("점수 관리 화면으로 이동합니다...");
+                        Thread.sleep(1000);
+                        return;
+                    }
+                } else {
+                    System.out.println("해당 회차에 등록되어있는 점수가 없습니다...");
+                    System.out.println("점수 관리 화면으로 이동합니다...");
+                    Thread.sleep(1000);
+                    return;
+                }
+            } else {
+                System.out.println("해당 과목을 수강하고 있지 않습니다...");
+                System.out.println("점수 관리 화면으로 이동합니다...");
+                Thread.sleep(1000);
+                return;
+            }
+
+
+        } else {
+            System.out.println("해당 수강생 고유번호는 존재하지 않습니다...");
+            System.out.println("점수 관리 화면으로 이동합니다...");
+            Thread.sleep(1000);
+            return;
+        }
+
         // 기능 구현
-        System.out.println("\n점수 수정 성공!");
+        System.out.println("\n점수 수정 성공! 점수 관리 화면으로 이동합니다...");
+        Thread.sleep(1000);
     }
 
     // 수강생의 특정 과목 회 차별 등급 조회

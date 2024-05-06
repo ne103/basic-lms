@@ -5,6 +5,7 @@ import model.Subject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class StudentRepository {
     private static ArrayList<Student> store = new ArrayList<>(); // Map으로도 관리할 수 있음
@@ -24,7 +25,7 @@ public class StudentRepository {
 
     // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
     // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
-    public static Student findById(int id){
+    public Student findById(int id){
         for (Student student : store) {
             if(student.getId() == id) {
                 return student;
