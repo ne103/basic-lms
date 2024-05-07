@@ -139,7 +139,7 @@ public class CampManagementApplication {
 
         }
         //저장소에 학생 등록
-        studentRepository.storeStudent(student);
+        studentRepository.registerStudent(student);
         System.out.println("수강생 등록 성공!\n");
     }
 

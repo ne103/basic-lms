@@ -18,7 +18,7 @@ public class StudentRepository {
      * */
 
     //수강생 등록
-    public void storeStudent(Student student) {
+    public void registerStudent(Student student) {
             store.add(student);
     }
 
