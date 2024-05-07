@@ -21,7 +21,13 @@ public class StudentRepository {
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
-
+    public void printStudents() {
+        for (int i = 0; i < store.size(); i++) {
+            System.out.println("--------------------------");
+            System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
+            System.out.println("--------------------------\n");
+        }
+    }
 
     // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
     // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
