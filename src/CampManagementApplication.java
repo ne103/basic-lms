@@ -129,13 +129,7 @@ public class CampManagementApplication {
                         System.out.println(subject.getId() + ": " + subject.name());
                     }
                     System.out.print("과목 ID 입력: ");
-                    int subjectId = sc.nextInt();
-                    for (Subject subject : Subject.values()) {
-                        if (subject.getId() == subjectId) {
-                            inquireRoundGradeBySubject(subject); // 수강생의 특정 과목 회차별 등급 조회
-                            break;
-                        }
-                    }
+                    inquireRoundGradeBySubject(Subject.findById(sc.nextInt())); // 수강생의 특정 과목 회차별 등급 조회
                 }
                 case 4 -> flag = false; // 메인 화면 이동
                 default -> {
