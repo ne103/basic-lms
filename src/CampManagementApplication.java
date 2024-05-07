@@ -123,7 +123,20 @@ public class CampManagementApplication {
             switch (input) {
                 case 1 -> createScore(); // 수강생의 과목별 시험 회차 및 점수 등록
                 case 2 -> updateRoundScoreBySubject(); // 수강생의 과목별 회차 점수 수정
-                case 3 -> inquireRoundGradeBySubject(); // 수강생의 특정 과목 회차별 등급 조회
+                case 3 -> {
+                    System.out.println("조회할 과목의 ID를 입력해 주세요. (ID: 과목 이름)");
+                    for (Subject subject : Subject.values()) {
+                        System.out.println(subject.getId() + ": " + subject.name());
+                    }
+                    System.out.print("과목 ID 입력: ");
+                    int subjectId = sc.nextInt();
+                    for (Subject subject : Subject.values()) {
+                        if (subject.getId() == subjectId) {
+                            inquireRoundGradeBySubject(subject); // 수강생의 특정 과목 회차별 등급 조회
+                            break;
+                        }
+                    }
+                }
                 case 4 -> flag = false; // 메인 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
@@ -259,7 +272,7 @@ public class CampManagementApplication {
     }
 
     // 수강생의 특정 과목 회 차별 등급 조회
-    private static void inquireRoundGradeBySubject() {
+    private static void inquireRoundGradeBySubject(Subject subject) {
         // 기능 구현 (조회할 특정 과목)
         System.out.println("회차별 등급을 조회합니다...");
         // 기능 구현
