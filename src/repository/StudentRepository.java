@@ -1,10 +1,13 @@
 package repository;
 
+import model.Report;
+import model.Score;
 import model.Student;
 import model.Subject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 public class StudentRepository {
@@ -79,6 +82,14 @@ public class StudentRepository {
         student4.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JAVA, Subject.MONGODB, Subject.MYSQL)));
         Student student5 = new Student(5,"강연우");
         student5.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
+
+        // test
+        ArrayList<Map.Entry<Integer, String>> scores = new ArrayList<>();
+        scores.add(Map.entry(5, "N"));
+        Score score = new Score(Subject.JAVA, 1, scores);
+        Report report = student1.getReport();
+        Map<Subject, Score> report1 = report.getReport();
+        report1.put(Subject.JAVA, score);
 
         store.add(student1);
         store.add(student2);

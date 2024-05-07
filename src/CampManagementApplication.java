@@ -6,10 +6,7 @@ import model.Subject;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Notification
@@ -29,7 +26,7 @@ import java.util.Scanner;
 public class CampManagementApplication {
     // 데이터 저장소
     private static StudentRepository studentRepository = new StudentRepository();
-//    private static ScoreRepository scoreRepository = new ScoreRepository();
+    private static ScoreRepository scoreRepository = new ScoreRepository();
 
     private static int studentIndex;
 
@@ -286,16 +283,31 @@ public class CampManagementApplication {
                 int round = sc.nextInt();
                 sc.nextLine();
 
-                Score score = scoreRepository.readScore(subjectId, id, round);
-                if (score != null) {
-                    System.out.println("과목 : " + Subject.findById(score.getSubjectId()));
-                    System.out.println("회차 : " + score.getRound() + "회차");
-                    System.out.println("점수 : " + score.getScore() + "점");
+                if (round <= 0 || round > 10) {
+                    System.out.println("회차는 1부터 10까지 입력 가능합니다...");
+                    System.out.println("점수 관리 화면으로 이동합니다...");
+                    Thread.sleep(1000);
+                    return;
+                }
+
+                // 수강생의 특정 과목 점수 리스트(회차별)를 꺼내는 로직
+                Report report = student.getReport();    // 수강생의 성적표 클래스
+                Map<Subject, Score> reportMap = report.getReport();   // 수강생의 과목별 성적표 Map
+                Score score = reportMap.get(Subject.findById(subjectId)); // 입력한 과목 ID에 해당하는 성적표 클래스
+                ArrayList<Map.Entry<Integer, String>> scores = score.getScores();   // 입력한 과목 ID에 해당하는 성적표 리스트
+
+                if (scores.size() >= round) {
+                    Map.Entry<Integer, String> scoreMap = scores.get(round - 1);  // 입력한 과목 ID 및 회차에 해당하는 점수, 등급 EntrySet
+                    int beforeScore = scoreMap.getKey();  // 입력한 과목 ID 및 회차에 해당하는 점수
+
+                    System.out.println("과목 : " + Subject.findById(subjectId));
+                    System.out.println("회차 : " + round + "회차");
+                    System.out.println("점수 : " + beforeScore + "점");
                     System.out.print("수정할 점수를 입력해주세요...");
                     int updateScore = sc.nextInt();
                     sc.nextLine();
                     if (updateScore >= 0 && updateScore <= 100) {
-                        scoreRepository.update(score.getId(), updateScore);
+                        score.updateScores(updateScore, round);
                     } else {
                         System.out.println("점수는 0부터 100까지 입력 가능합니다...");
                         System.out.println("점수 관리 화면으로 이동합니다...");

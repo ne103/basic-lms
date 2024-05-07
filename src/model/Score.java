@@ -41,6 +41,15 @@ public class Score {
         this.scores.add(entry);
     }
 
+    // 특정 회차에 대한 수정 메서드(오버로딩)
+    public void updateScores(int inputScore, int round){
+        String grade = scoreToGrade(inputScore);
+        Map.Entry<Integer, String> entry = Map.entry(inputScore, grade);
+        this.scores.remove(round - 1);
+        this.scores.add(round - 1, entry);
+    }
+
+
     /*
     * 등급 산정하는 함수
     * score가 변동이 있을때 실행되어야 합니다.*/
