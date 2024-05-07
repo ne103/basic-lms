@@ -5,7 +5,6 @@ import model.Subject;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -43,7 +42,6 @@ public class CampManagementApplication {
         try {
             displayMainView();
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
     }
@@ -102,11 +100,11 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
-        //ID 생성
+        //ID 중복 확인 (더미 데이터 빼면 사실상 필요 없음)
         //현재 등록된 수강생 ID 리스트를 받아서
         ArrayList<Integer> idList = new ArrayList<>();
         studentRepository.getStudentID(idList);
-        //새로운 수강생 ID가 기존 ID 리스트에 포함되있는지 확인
+        //새로 등록할 ID가 기존 ID 리스트에 포함되있는지 확인
         boolean success = false;
         while(!success) {
             if (idList.contains(studentIndex)) {
@@ -118,7 +116,7 @@ public class CampManagementApplication {
         //학생 객체 생성 후 ID값 1증가
         Student student = new Student(studentIndex++,studentName);
         success = false;
-        //요건을 충족하는 과목을 선택할때 까지 반복
+        //조건을 충족하는 과목들을 선택할때 까지 반복
         while(!success) {
             //과목 선택
             System.out.println("3개 이상의 필수 과목, 2개 이상의 선택 과목 선택");
@@ -126,8 +124,9 @@ public class CampManagementApplication {
             System.out.println("선택 과목 : 6.DEGINE_PATTERN, 7.SPRING_SECURITY, 8.REFIS, 9.MONGODB");
             System.out.print("등록할 과목 입력(숫자/띄어쓰기): ");
             String[] subject = sc.nextLine().split(" ");
-            //임시 리스트에 선택한 과목을 추가 및 필수,선택 과목 개수 세기
+            //리스트 생성 후 선택한 과목을 추가
             ArrayList<Subject> subjectList = new ArrayList<>();
+            // 추가로 필수과목,선택과목 개수 세기
             int essential=0;
             int select=0;
             for (String s : subject) {
@@ -143,16 +142,17 @@ public class CampManagementApplication {
                     case "9" -> {subjectList.add(Subject.MONGODB); select++;}
                 }
             }
-            //요건 충족 확인
+            //과목 개수로 조건 충족 확인
             if (essential >= 3 && select >= 2) {
                 success = true;
+                //과목을 추가한 리스트를 학생 객체의 과목 리스트로 전달
                 student.setSubjectList(subjectList);
             } else {
                 System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
             }
 
         }
-        //저장소에 학생 등록
+        //저장소에 학생 객체 등록
         studentRepository.registerStudent(student);
         System.out.println("수강생 등록 성공!\n");
     }
