@@ -1,25 +1,25 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+
 public class Score {
-    private final int id;
+//    private final int id;
     private final int subjectId;
     private final int studentId;
-    private int round;
-    private int score;
-    private String grade;
+//    private int round;
+    private ArrayList<Entry<Integer, String>> scores;
 
-    public Score(int id, Subject subject, int studentId, int round, int score) {
-        this.id = id;
+    public Score(int id, Subject subject, int studentId, ArrayList<Entry<Integer, String>> scores) {
+//        this.id = id;
         this.subjectId = subject.getId();
         this.studentId = studentId;
-        this.round = round;
-        this.score = score;
-        this.grade = scoreToGrade(subjectId, score);
+        this.scores = scores;
     }
 
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
 
     public int getSubjectId() {
         return subjectId;
@@ -29,26 +29,10 @@ public class Score {
         return studentId;
     }
 
-    public int getRound() {
-        return round;
+    public ArrayList<Entry<Integer, String>> getScores() {
+        return scores;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setRound(int round) {
-        this.round = round;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-        this.grade = scoreToGrade(subjectId, score);
-    }
 
     /*
     * 등급 산정하는 함수
