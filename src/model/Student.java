@@ -31,4 +31,9 @@ public class Student {
     }
 
 
+
+    // 매개변수로 들어온 과목이 학생이 수강중인 과목인지 아닌지 판별합니다.
+    public boolean checkSubjectExist(Subject subject) {
+        return subjectList.contains(subject);
+    }
 }

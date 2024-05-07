@@ -27,5 +27,16 @@ public enum Subject {
         return isEssential;
     }
 
+    /* findById
+     * 과목id로 해당하는 Subject 객체를 찾아 반환해줍니다.
+     * 없으면 null을 반환하고, null을 실패 조건으로 사용합니다.*/
+    public static Subject findById(int id){
+        for (Subject value : values()) {
+            if(value.getId() == id){
+                return value;
+            }
+        }
+        return null;
+    }
 }
 

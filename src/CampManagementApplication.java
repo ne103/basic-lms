@@ -7,7 +7,7 @@ import repository.StudentRepository;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -43,6 +43,7 @@ public class CampManagementApplication {
         try {
             displayMainView();
         } catch (Exception e) {
+            System.out.println(e.getStackTrace());
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
     }
@@ -101,16 +102,29 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
-        //학생 객체 생성
-        Student student = new Student(studentIndex++,studentName);
+        //ID 생성
+        //현재 등록된 수강생 ID 리스트를 받아서
+        ArrayList<Integer> idList = new ArrayList<>();
+        studentRepository.getStudentID(idList);
+        //새로운 수강생 ID가 기존 ID 리스트에 포함되있는지 확인
         boolean success = false;
+        while(!success) {
+            if (idList.contains(studentIndex)) {
+                studentIndex++; //있으면 ID값 1증가 후 루프로 돌아가 다시 검증
+            } else {
+                success = true; //없으면 루프 빠져나옴
+            }
+        }
+        //학생 객체 생성 후 ID값 1증가
+        Student student = new Student(studentIndex++,studentName);
+        success = false;
         //요건을 충족하는 과목을 선택할때 까지 반복
         while(!success) {
             //과목 선택
             System.out.println("3개 이상의 필수 과목, 2개 이상의 선택 과목 선택");
-            System.out.println("필수 과목 : JAVA, OOP, SPRING, JPA, MYSQL");
-            System.out.println("선택 과목 : DEGINE_PATTERN, SPRING_SECURITY, REFIS, MONGODB");
-            System.out.print("선택할 과목 입력(대문자): ");
+            System.out.println("필수 과목 : 1.JAVA, 2.OOP, 3.SPRING, 4.JPA, 5.MYSQL");
+            System.out.println("선택 과목 : 6.DEGINE_PATTERN, 7.SPRING_SECURITY, 8.REFIS, 9.MONGODB");
+            System.out.print("등록할 과목 입력(숫자/띄어쓰기): ");
             String[] subject = sc.nextLine().split(" ");
             //임시 리스트에 선택한 과목을 추가 및 필수,선택 과목 개수 세기
             ArrayList<Subject> subjectList = new ArrayList<>();
@@ -118,15 +132,15 @@ public class CampManagementApplication {
             int select=0;
             for (String s : subject) {
                 switch (s) {
-                    case "JAVA" -> {subjectList.add(Subject.JAVA); essential++;}
-                    case "OOP" -> {subjectList.add(Subject.OOP); essential++;}
-                    case "SPRING" -> {subjectList.add(Subject.SPRING); essential++;}
-                    case "JPA" -> {subjectList.add(Subject.JPA); essential++;}
-                    case "MYSQL" -> {subjectList.add(Subject.MYSQL); essential++;}
-                    case "DEGINE_PATTERN" -> {subjectList.add(Subject.DEGINE_PATTERN); select++;}
-                    case "SPRING_SECURITY" -> {subjectList.add(Subject.SPRING_SECURITY); select++;}
-                    case "REFIS" -> {subjectList.add(Subject.REDIS); select++;}
-                    case "MONGODB" -> {subjectList.add(Subject.MONGODB); select++;}
+                    case "1" -> {subjectList.add(Subject.JAVA); essential++;}
+                    case "2" -> {subjectList.add(Subject.OOP); essential++;}
+                    case "3" -> {subjectList.add(Subject.SPRING); essential++;}
+                    case "4" -> {subjectList.add(Subject.JPA); essential++;}
+                    case "5" -> {subjectList.add(Subject.MYSQL); essential++;}
+                    case "6" -> {subjectList.add(Subject.DEGINE_PATTERN); select++;}
+                    case "7" -> {subjectList.add(Subject.SPRING_SECURITY); select++;}
+                    case "8" -> {subjectList.add(Subject.REDIS); select++;}
+                    case "9" -> {subjectList.add(Subject.MONGODB); select++;}
                 }
             }
             //요건 충족 확인
@@ -150,7 +164,7 @@ public class CampManagementApplication {
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
-    private static void displayScoreView() {
+    private static void displayScoreView() throws InterruptedException {
         boolean flag = true;
         while (flag) {
             System.out.println("==================================");
@@ -177,17 +191,129 @@ public class CampManagementApplication {
 
     // 수강생의 과목별 시험 회차 및 점수 등록
     private static void createScore() {
-        System.out.println("시험 점수를 등록합니다...");
-        // 기능 구현
-        System.out.println("\n점수 등록 성공!");
+        // 학생 id 입력 및 존재 확인
+        System.out.print("관리할 학생의 id를 입력하세요: ");
+        int studentId = sc.nextInt();
+        sc.nextLine();
+        Student student = studentRepository.findById(studentId);
+        if (student == null){
+            System.out.println(studentId + "번 학생은 존재하지 않습니다.");
+            return;
+        }
+
+        // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
+        System.out.print(student.getName()+" 학생의 추가할 점수의 과목 id를 입력하세요: ");
+        int subjectId = sc.nextInt();
+        sc.nextLine();
+        Subject subject = Subject.findById(subjectId);
+        if(subject == null){
+            System.out.println("존재하지 않는 과목 id 입니다.");
+            return;
+        }
+        if(!student.checkSubjectExist(subject)){
+            System.out.println("이 학생은 해당 과목을 수강하지 않았습니다.");
+            return;
+        }
+
+        // 회차 입력 및 회차범위, 이미 존재여부 확인
+        System.out.print(student.getName() + " 학생의 " + subject.name() + " 과목의 회차를 입력하세요:");
+        int round = sc.nextInt();
+        sc.nextLine();
+        if (round < 1 || round > 10 ){
+            System.out.println("회차는 1~10까지만 존재합니다.");
+            return;
+        }
+        ArrayList<Score> scoreList = scoreRepository.findByIds(subjectId, studentId);
+        if(scoreRepository.checkRoundIsExist(scoreList, round)){
+            System.out.println("이미 존재하는 회차입니다. 등록할 수 없습니다.");
+            return;
+        }
+
+        System.out.print("등록할 점수를 입력해주세요: ");
+        int score = sc.nextInt();
+        sc.nextLine();
+        if (score < 0 || score > 100){
+            System.out.println("잘못된 점수입니다.");
+            return;
+        }
+
+        scoreRepository.create(studentId,subject,round,score);
+
     }
 
     // 수강생의 과목별 회차 점수 수정
-    private static void updateRoundScoreBySubject() {
+    private static void updateRoundScoreBySubject() throws InterruptedException {
         // 기능 구현 (수정할 과목 및 회차, 점수)
+        System.out.println("==================================");
         System.out.println("시험 점수를 수정합니다...");
+
+        // 수강생 고유번호 입력
+        System.out.print("수강생 고유번호를 입력해주세요...");
+        int id = sc.nextInt();
+        sc.nextLine(); // 엔터 입력 시 엔터 자체를 입력으로 받아들여 다음 실행될 구문이 씹히는 것을 방지
+
+        Student student = studentRepository.findById(id);
+
+        if (student != null) {
+
+            // 수정할 과목ID 입력
+            System.out.print("수정할 과목의 ID를 입력해주세요...");
+            for (Subject subject : Subject.values()) {
+                System.out.print(" " + subject.getId() + ". " + subject); // 반복문으로 enum에 저장된 값 출력
+            }
+            System.out.print("...");
+            int subjectId = sc.nextInt();
+            sc.nextLine();
+
+            ArrayList<Subject> subjectList = student.getSubjectList();
+
+            // Subject에 입력한 과목id 비교 - anyMatch() : 하나라도 존재하는것이 있으면 true, 아니면 false
+            if (subjectList.stream().anyMatch(o -> o.getId() == subjectId)) {
+                // 수정할 회차 입력
+                System.out.print("수정할 회차(1~10)를 입력해주세요...");
+                int round = sc.nextInt();
+                sc.nextLine();
+
+                Score score = scoreRepository.readScore(subjectId, id, round);
+                if (score != null) {
+                    System.out.println("과목 : " + Subject.findById(score.getSubjectId()));
+                    System.out.println("회차 : " + score.getRound() + "회차");
+                    System.out.println("점수 : " + score.getScore() + "점");
+                    System.out.print("수정할 점수를 입력해주세요...");
+                    int updateScore = sc.nextInt();
+                    sc.nextLine();
+                    if (updateScore >= 0 && updateScore <= 100) {
+                        scoreRepository.update(score.getId(), updateScore);
+                    } else {
+                        System.out.println("점수는 0부터 100까지 입력 가능합니다...");
+                        System.out.println("점수 관리 화면으로 이동합니다...");
+                        Thread.sleep(1000);
+                        return;
+                    }
+                } else {
+                    System.out.println("해당 회차에 등록되어있는 점수가 없습니다...");
+                    System.out.println("점수 관리 화면으로 이동합니다...");
+                    Thread.sleep(1000);
+                    return;
+                }
+            } else {
+                System.out.println("해당 과목을 수강하고 있지 않습니다...");
+                System.out.println("점수 관리 화면으로 이동합니다...");
+                Thread.sleep(1000);
+                return;
+            }
+
+
+        } else {
+            System.out.println("해당 수강생 고유번호는 존재하지 않습니다...");
+            System.out.println("점수 관리 화면으로 이동합니다...");
+            Thread.sleep(1000);
+            return;
+        }
+
         // 기능 구현
-        System.out.println("\n점수 수정 성공!");
+        System.out.println("\n점수 수정 성공! 점수 관리 화면으로 이동합니다...");
+        Thread.sleep(1000);
     }
 
     // 수강생의 특정 과목 회 차별 등급 조회
