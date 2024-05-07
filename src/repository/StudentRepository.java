@@ -76,7 +76,7 @@ public class StudentRepository {
         Student student3 = new Student(3,"박하준");
         student3.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
         Student student4 = new Student(4,"최이안");
-        student4.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
+        student4.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JAVA, Subject.MONGODB, Subject.MYSQL)));
         Student student5 = new Student(5,"강연우");
         student5.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
 
