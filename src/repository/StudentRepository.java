@@ -18,6 +18,17 @@ public class StudentRepository {
      * 조건: 수강생의 고유번호는 중복될 수 없습니다.
      * */
 
+    //수강생 등록
+    public void registerStudent(Student student) {
+            store.add(student);
+    }
+
+    //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
+    public void getStudentID(ArrayList<Integer> idList) {
+            for (Student student : store) {
+                idList.add(student.getId());
+            }
+    }
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
