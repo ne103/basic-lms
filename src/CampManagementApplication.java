@@ -2,6 +2,7 @@
 import model.Score;
 import model.Student;
 import model.Subject;
+import model.Report;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
@@ -29,7 +30,6 @@ public class CampManagementApplication {
     private static StudentRepository studentRepository = new StudentRepository();
     private static ScoreRepository scoreRepository = new ScoreRepository();
 
-    private static int studentIndex;
 
     // 스캐너
     private static Scanner sc = new Scanner(System.in);
@@ -100,22 +100,12 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
-        //ID 중복 확인 (더미 데이터 빼면 사실상 필요 없음)
         //현재 등록된 수강생 ID 리스트를 받아서
         ArrayList<Integer> idList = new ArrayList<>();
-        studentRepository.getStudentID(idList);
-        //새로 등록할 ID가 기존 ID 리스트에 포함되있는지 확인
-        boolean success = false;
-        while(!success) {
-            if (idList.contains(studentIndex)) {
-                studentIndex++; //있으면 ID값 1증가 후 루프로 돌아가 다시 검증
-            } else {
-                success = true; //없으면 루프 빠져나옴
-            }
-        }
         //학생 객체 생성 후 ID값 1증가
-        Student student = new Student(studentIndex++,studentName);
-        success = false;
+        int id = StudentRepository.getStoreSize() + 1;
+        Student student = new Student(id,studentName);
+        boolean success = false;
         //조건을 충족하는 과목들을 선택할때 까지 반복
         while(!success) {
             //과목 선택
@@ -124,29 +114,67 @@ public class CampManagementApplication {
             System.out.println("선택 과목 : 6.DEGINE_PATTERN, 7.SPRING_SECURITY, 8.REFIS, 9.MONGODB");
             System.out.print("등록할 과목 입력(숫자/띄어쓰기): ");
             String[] subject = sc.nextLine().split(" ");
-            //리스트 생성 후 선택한 과목을 추가
+            //과목 리스트, 리포트 생성 후 선택한 과목을 추가
             ArrayList<Subject> subjectList = new ArrayList<>();
-            // 추가로 필수과목,선택과목 개수 세기
+            Report report = new Report();
+            // 및 필수과목,선택과목 개수 세기
             int essential=0;
             int select=0;
             for (String s : subject) {
                 switch (s) {
-                    case "1" -> {subjectList.add(Subject.JAVA); essential++;}
-                    case "2" -> {subjectList.add(Subject.OOP); essential++;}
-                    case "3" -> {subjectList.add(Subject.SPRING); essential++;}
-                    case "4" -> {subjectList.add(Subject.JPA); essential++;}
-                    case "5" -> {subjectList.add(Subject.MYSQL); essential++;}
-                    case "6" -> {subjectList.add(Subject.DEGINE_PATTERN); select++;}
-                    case "7" -> {subjectList.add(Subject.SPRING_SECURITY); select++;}
-                    case "8" -> {subjectList.add(Subject.REDIS); select++;}
-                    case "9" -> {subjectList.add(Subject.MONGODB); select++;}
+                    case "1" -> {
+                        subjectList.add(Subject.JAVA);
+                        report.updateReport(Subject.JAVA, null);
+                        essential++;
+                    }
+                    case "2" -> {
+                        subjectList.add(Subject.OOP);
+                        report.updateReport(Subject.OOP, null);
+                        essential++;
+                    }
+                    case "3" -> {
+                        subjectList.add(Subject.SPRING);
+                        report.updateReport(Subject.SPRING, null);
+                        essential++;
+                    }
+                    case "4" -> {
+                        subjectList.add(Subject.JPA);
+                        report.updateReport(Subject.JPA, null);
+                        essential++;
+                    }
+                    case "5" -> {
+                        subjectList.add(Subject.MYSQL);
+                        report.updateReport(Subject.MYSQL, null);
+                        essential++;
+                    }
+                    case "6" -> {
+                        subjectList.add(Subject.DEGINE_PATTERN);
+                        report.updateReport(Subject.DEGINE_PATTERN, null);
+                        select++;
+                    }
+                    case "7" -> {
+                        subjectList.add(Subject.SPRING_SECURITY);
+                        report.updateReport(Subject.SPRING_SECURITY, null);
+                        select++;
+                    }
+                    case "8" -> {
+                        subjectList.add(Subject.REDIS);
+                        report.updateReport(Subject.REDIS, null);
+                        select++;
+                    }
+                    case "9" -> {
+                        subjectList.add(Subject.MONGODB);
+                        report.updateReport(Subject.MONGODB, null);
+                        select++;
+                    }
                 }
             }
             //과목 개수로 조건 충족 확인
             if (essential >= 3 && select >= 2) {
                 success = true;
-                //과목을 추가한 리스트를 학생 객체의 과목 리스트로 전달
+                //조건 충족 시 과목을 추가한 리스트를 학생 객체의 과목 리스트로 전달
                 student.setSubjectList(subjectList);
+                student.setReport(report);
             } else {
                 System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
             }

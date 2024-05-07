@@ -24,10 +24,8 @@ public class StudentRepository {
     }
 
     //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
-    public void getStudentID(ArrayList<Integer> idList) {
-            for (Student student : store) {
-                idList.add(student.getId());
-            }
+    public static int getStoreSize() {
+            return store.size();
     }
 
     /*read
