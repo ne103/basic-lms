@@ -160,7 +160,7 @@ public class CampManagementApplication {
     // 수강생 목록 조회
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
-        // 기능 구현
+        studentRepository.printStudents();// 기능 구현
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
