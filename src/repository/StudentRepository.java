@@ -18,10 +18,27 @@ public class StudentRepository {
      * 조건: 수강생의 고유번호는 중복될 수 없습니다.
      * */
 
+    //수강생 등록
+    public void registerStudent(Student student) {
+            store.add(student);
+    }
+
+    //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
+    public void getStudentID(ArrayList<Integer> idList) {
+            for (Student student : store) {
+                idList.add(student.getId());
+            }
+    }
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
-
+    public void printStudents() {
+        for (int i = 0; i < store.size(); i++) {
+            System.out.println("--------------------------");
+            System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
+            System.out.println("--------------------------\n");
+        }
+    }
 
     // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
     // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
