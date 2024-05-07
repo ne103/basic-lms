@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class StudentRepository {
+
     private static ArrayList<Student> store = new ArrayList<>(); // Map으로도 관리할 수 있음
     private static int index = 0;
 
@@ -20,14 +21,14 @@ public class StudentRepository {
 
     //수강생 등록
     public void registerStudent(Student student) {
-            store.add(student);
+        store.add(student);
     }
 
     //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
     public void getStudentID(ArrayList<Integer> idList) {
-            for (Student student : store) {
-                idList.add(student.getId());
-            }
+        for (Student student : store) {
+            idList.add(student.getId());
+        }
     }
 
     /*read
@@ -35,23 +36,33 @@ public class StudentRepository {
     public void printStudents() {
         for (int i = 0; i < store.size(); i++) {
             System.out.println("--------------------------");
-            System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
+            System.out.println(
+                "Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
             System.out.println("--------------------------\n");
         }
     }
 
     // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
     // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
-    public Student findById(int id){
+    public Student findById(int id) {
         for (Student student : store) {
-            if(student.getId() == id) {
+            if (student.getId() == id) {
                 return student;
             }
         }
         return null; // null이면 실패
     }
 
+    public ArrayList<Student> findByName(String name) {
+        ArrayList<Student> students = new ArrayList<>();
 
+        for (Student student : store) {
+            if (name.equals(student.getName())) {
+                students.add(student);
+            }
+        }
+        return students;
+    }
 
     // ---------------------- 선택 -----------------------------
     /*read
@@ -68,17 +79,23 @@ public class StudentRepository {
 
 
     // TODO: 추후 삭제 (더미 데이터 생성코드)
-    public void setTestData(){
-        Student student1 = new Student(1,"김준혁");
+    public void setTestData() {
+        Student student1 = new Student(1, "김준혁");
         student1.getSubjectList().addAll(Arrays.stream(Subject.values()).toList());
-        Student student2 = new Student(2,"이도윤");
-        student2.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JAVA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
-        Student student3 = new Student(3,"박하준");
-        student3.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
-        Student student4 = new Student(4,"최이안");
-        student4.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
-        Student student5 = new Student(5,"강연우");
-        student5.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
+        Student student2 = new Student(2, "이도윤");
+        student2.getSubjectList().addAll(new ArrayList<>(
+            Arrays.asList(Subject.JAVA, Subject.OOP, Subject.SPRING, Subject.MONGODB,
+                Subject.MYSQL)));
+        Student student3 = new Student(3, "박하준");
+        student3.getSubjectList().addAll(new ArrayList<>(
+            Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
+        Student student4 = new Student(4, "최이안");
+        student4.getSubjectList().addAll(new ArrayList<>(
+            Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
+        Student student5 = new Student(5, "강연우");
+        student5.getSubjectList().addAll(new ArrayList<>(
+            Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB,
+                Subject.MYSQL)));
 
         store.add(student1);
         store.add(student2);
