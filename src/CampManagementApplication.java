@@ -8,7 +8,7 @@ import repository.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.Arrays;
 /**
  * Notification
  * Java, 객체지향이 아직 익숙하지 않은 분들은 위한 소스코드 틀입니다.
@@ -99,6 +99,7 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
+        //학생 인스턴스 생성
         Student student =new Student(studentName);
         //조건을 충족하는 과목들을 선택할때 까지 반복
         boolean success = false;
