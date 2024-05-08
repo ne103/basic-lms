@@ -42,6 +42,7 @@ public class CampManagementApplication {
         try {
             displayMainView();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
     }
@@ -181,8 +182,8 @@ public class CampManagementApplication {
         }
         //저장소에 학생 객체 등록
         studentRepository.registerStudent(student);
-        System.out.println("수강생 등록 성공!\n");
-        System.out.println("학생의 ID는 "+id+"입니다.");
+        System.out.println("수강생 등록 성공!");
+        System.out.println("학생의 ID는 "+id+"입니다\n");
     }
 
     // 수강생 목록 조회
