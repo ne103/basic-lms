@@ -204,7 +204,7 @@ public class CampManagementApplication {
         for (Subject subject : student.getSubjectList()) {
             System.out.print(subject.getId() + ". " + subject.name() + " ");
         }
-        System.out.println("");
+        System.out.println(" ");
 
         // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
         System.out.print(student.getName()+" 학생의 추가할 점수의 과목 id를 입력하세요: ");
@@ -325,10 +325,57 @@ public class CampManagementApplication {
     private static void inquireRoundGradeBySubject() {
         // 기능 구현 (조회할 특정 과목)
         System.out.println("회차별 등급을 조회합니다...");
-        // 기능 구현
+        // 학생 id 입력 및 존재 확인
+        System.out.print("조회할 학생의 id를 입력하세요: ");
+        int studentId = sc.nextInt();
+        sc.nextLine();
+        Student student = studentRepository.findById(studentId);
+        if (student == null){
+            System.out.println(studentId + "번 학생은 존재하지 않습니다.");
+            return;
+        }
+
+        // 학생이 수강하는 과목 리스트 출력
+        for (Subject subject : student.getSubjectList()) {
+            System.out.print(subject.getId() + ". " + subject.name() + " ");
+        }
+        System.out.println(" ");
+
+        // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
+        System.out.print(student.getName()+" 학생의 조회할 과목 id를 입력하세요: ");
+        int subjectId = sc.nextInt();
+        sc.nextLine();
+        Subject subject = Subject.findById(subjectId);
+        if(subject == null){
+            System.out.println("존재하지 않는 과목 id 입니다.");
+            return;
+        }
+        if(!student.checkSubjectExist(subject)){
+            System.out.println("이 학생은 해당 과목을 수강하지 않았습니다.");
+            return;
+        }
+
+        // 회차 입력 및 회차범위, 이미 존재여부 확인
+        System.out.print(student.getName() + " 학생의 " + subject.name() + " 과목의 회차를 입력하세요:");
+        int round = sc.nextInt();
+        sc.nextLine();
+        if (round < 1 || round > 10 ){
+            System.out.println("회차는 1~10까지만 존재합니다.");
+            return;
+        }
+
+        if(!scoreRepository.hasRound(studentId, subject, round)){
+            System.out.println(round + "회차는 아직 등록되지 않았습니다.");
+            return;
+        }
+
+        Score score = scoreRepository.readScore(subjectId, studentId, round);
+
+        System.out.println("==========================");
+        System.out.println("학생: " + studentId + ". " + student.getName());
+        System.out.println("과목: " + subject.name());
+        System.out.println("점수: " + score.getRound() + "회차 " + score.getScore() + "점 " + score.getGrade() + "등급");
+        System.out.println("==========================");
         System.out.println("\n등급 조회 성공!");
     }
-
-
-
 }
