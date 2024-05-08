@@ -4,10 +4,10 @@ import model.Score;
 import model.Subject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class ScoreRepository {
-    private static ArrayList<Score> store = new ArrayList<>(); // Map으로도 관리할 수 있음
+    private static HashMap<Integer, ArrayList<Score>> store = new HashMap<>();
     private static int index = 0;
     /*
      * create
@@ -15,8 +15,14 @@ public class ScoreRepository {
      * */
     public void create(int studentId, Subject subject, int round, int score){
         Score scoreInstance = new Score(++index, subject, studentId, round, score);
-        store.add(scoreInstance);
-        System.out.println("점수 등록 성공");
+        ArrayList<Score> scores = store.get(studentId);
+        if(scores == null){
+            ArrayList<Score> tempScores = new ArrayList<>();
+            tempScores.add(scoreInstance);
+            store.put(studentId, tempScores);
+        } else {
+            scores.add(scoreInstance);
+        }
     }
 
     /*
@@ -24,8 +30,8 @@ public class ScoreRepository {
     * ex) 김준현 학생의 JAVA 과목 회차들 (1,2,3,4,5회차)를 반환*/
     public ArrayList<Score> findByIds(int subjectId, int studentId){
         ArrayList<Score> list = new ArrayList<>();
-        for (Score score : store) {
-            if (score.getStudentId() == studentId && score.getSubjectId() == subjectId){
+        for (Score score : store.get(studentId)) {
+            if (score.getSubjectId() == subjectId){
                 list.add(score);
             }
         }
@@ -34,9 +40,13 @@ public class ScoreRepository {
 
     /*
     * 회차가 존재하는지 판별합니다.*/
-    public boolean checkRoundIsExist(ArrayList<Score> scoreArrayList, int round){
-        for (Score score : scoreArrayList) {
-            if (score.getRound() == round){
+    public boolean hasRound(int studentId, Subject subject, int round){
+        ArrayList<Score> scores = store.get(studentId);
+        if (scores == null){
+            return false;
+        }
+        for (Score score : scores) {
+            if (score.getSubjectId() == subject.getId() && score.getRound() == round){
                 return true;
             }
         }
@@ -48,7 +58,7 @@ public class ScoreRepository {
      * 수강생 등급을 조회할 수 있습니다*/
     // 수강생의 수정할 과목의 회차의 점수 조회
     public Score readScore(int subjectId, int studentId, int round) {
-        return store.stream().filter(o -> o.getSubjectId() == subjectId)
+        return store.get(studentId).stream().filter(o -> o.getSubjectId() == subjectId)
                              .filter(o -> o.getStudentId() == studentId)
                              .filter(o -> o.getRound() == round)
                              .findFirst()
@@ -57,8 +67,8 @@ public class ScoreRepository {
 
     /*update
      * 수강생의 과목별 회차점수를 수정할 수 있습니다.*/
-    public void update(int id, int updateScore) {
-        store.stream().filter(o -> o.getId() == id).findFirst().ifPresent(score -> score.setScore(updateScore));
+    public void update(int studentId, int id, int updateScore) {
+        store.get(studentId).stream().filter(o -> o.getId() == id).findFirst().ifPresent(score -> score.setScore(updateScore));
     }
 
 
@@ -83,10 +93,10 @@ public class ScoreRepository {
         Score score4 = new Score(4, Subject.SPRING, 1, 1, 80);
         Score score5 = new Score(5, Subject.JAVA, 2, 1, 100);
 
-        store.add(score1);
-        store.add(score2);
-        store.add(score3);
-        store.add(score4);
-        store.add(score5);
+//        store.add(score1);
+//        store.add(score2);
+//        store.add(score3);
+//        store.add(score4);
+//        store.add(score5);
     }
 }

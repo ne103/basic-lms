@@ -6,7 +6,6 @@ import repository.ScoreRepository;
 import repository.StudentRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -201,6 +200,12 @@ public class CampManagementApplication {
             return;
         }
 
+        // 학생이 수강하는 과목 리스트 출력
+        for (Subject subject : student.getSubjectList()) {
+            System.out.print(subject.getId() + ". " + subject.name() + " ");
+        }
+        System.out.println("");
+
         // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
         System.out.print(student.getName()+" 학생의 추가할 점수의 과목 id를 입력하세요: ");
         int subjectId = sc.nextInt();
@@ -223,8 +228,8 @@ public class CampManagementApplication {
             System.out.println("회차는 1~10까지만 존재합니다.");
             return;
         }
-        ArrayList<Score> scoreList = scoreRepository.findByIds(subjectId, studentId);
-        if(scoreRepository.checkRoundIsExist(scoreList, round)){
+
+        if(scoreRepository.hasRound(studentId, subject, round)){
             System.out.println("이미 존재하는 회차입니다. 등록할 수 없습니다.");
             return;
         }
@@ -236,9 +241,9 @@ public class CampManagementApplication {
             System.out.println("잘못된 점수입니다.");
             return;
         }
-
         scoreRepository.create(studentId,subject,round,score);
 
+        System.out.println(subject.name() + " " + round + "회차 " + score + "점 등록 성공!");
     }
 
     // 수강생의 과목별 회차 점수 수정
@@ -283,7 +288,7 @@ public class CampManagementApplication {
                     int updateScore = sc.nextInt();
                     sc.nextLine();
                     if (updateScore >= 0 && updateScore <= 100) {
-                        scoreRepository.update(score.getId(), updateScore);
+                        scoreRepository.update(student.getId() ,score.getId(), updateScore);
                     } else {
                         System.out.println("점수는 0부터 100까지 입력 가능합니다...");
                         System.out.println("점수 관리 화면으로 이동합니다...");
