@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Score {
@@ -10,7 +11,7 @@ public class Score {
 //    private int round;
     private ArrayList<Entry<Integer, String>> scores;
 
-    public Score(int id, Subject subject, int studentId, ArrayList<Entry<Integer, String>> scores) {
+    public Score(Subject subject, int studentId, ArrayList<Entry<Integer, String>> scores) {
 //        this.id = id;
         this.subjectId = subject.getId();
         this.studentId = studentId;
@@ -33,14 +34,29 @@ public class Score {
         return scores;
     }
 
+    /**/
+    public void updateScores(int inputScore){
+        String grade = scoreToGrade(inputScore);
+        Map.Entry<Integer, String> entry = Map.entry(inputScore, grade);
+        this.scores.add(entry);
+    }
+
+    // 특정 회차에 대한 수정 메서드(오버로딩)
+    public void updateScores(int inputScore, int round){
+        String grade = scoreToGrade(inputScore);
+        Map.Entry<Integer, String> entry = Map.entry(inputScore, grade);
+        this.scores.remove(round - 1);
+        this.scores.add(round - 1, entry);
+    }
+
 
     /*
     * 등급 산정하는 함수
     * score가 변동이 있을때 실행되어야 합니다.*/
-    private String scoreToGrade(int subjectId, int score){
+    private String scoreToGrade(int score){
         Subject subject = Subject.findById(subjectId);
         if (subject == null) {
-            throw new IllegalArgumentException();// 예외처리?
+            throw new IllegalArgumentException();
         }
         if (subject.isEssential()) {
             if (score >= 95){

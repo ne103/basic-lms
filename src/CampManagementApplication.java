@@ -1,4 +1,5 @@
 
+import model.Report;
 import model.Score;
 import model.Student;
 import model.Subject;
@@ -6,9 +7,7 @@ import model.Report;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Notification
@@ -37,7 +36,7 @@ public class CampManagementApplication {
     public static void main(String[] args) {
         // 더미 데이터 입력
         studentRepository.setTestData();
-        scoreRepository.setTestData();
+//        scoreRepository.setTestData();
 
         try {
             displayMainView();
@@ -238,6 +237,10 @@ public class CampManagementApplication {
         }
 
         // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
+        for (Subject value : student.getSubjectList()) {
+            System.out.print( value.getId() + ". " + value.name()+ " ");
+        }
+        System.out.println("");
         System.out.print(student.getName()+" 학생의 추가할 점수의 과목 id를 입력하세요: ");
         int subjectId = sc.nextInt();
         sc.nextLine();
@@ -246,35 +249,34 @@ public class CampManagementApplication {
             System.out.println("존재하지 않는 과목 id 입니다.");
             return;
         }
-        if(!student.checkSubjectExist(subject)){
+        if(!student.hasSubject(subject)){
             System.out.println("이 학생은 해당 과목을 수강하지 않았습니다.");
             return;
         }
 
-        // 회차 입력 및 회차범위, 이미 존재여부 확인
-        System.out.print(student.getName() + " 학생의 " + subject.name() + " 과목의 회차를 입력하세요:");
-        int round = sc.nextInt();
+        System.out.print(subject.name() + " 과목 등록할 점수를 입력해주세요: ");
+        int inputScore = sc.nextInt();
         sc.nextLine();
-        if (round < 1 || round > 10 ){
-            System.out.println("회차는 1~10까지만 존재합니다.");
-            return;
-        }
-        ArrayList<Score> scoreList = scoreRepository.findByIds(subjectId, studentId);
-        if(scoreRepository.checkRoundIsExist(scoreList, round)){
-            System.out.println("이미 존재하는 회차입니다. 등록할 수 없습니다.");
+        if (inputScore < 0 || inputScore > 100){
+            System.out.println("잘못된 점수입니다.(0 ~ 100 사이의 점수를 입력해주세요.)");
             return;
         }
 
-        System.out.print("등록할 점수를 입력해주세요: ");
-        int score = sc.nextInt();
-        sc.nextLine();
-        if (score < 0 || score > 100){
-            System.out.println("잘못된 점수입니다.");
-            return;
+        Report report = student.getReport();
+        if(report.getReport().get(subject) == null){
+            Score score = new Score(subject, studentId, new ArrayList<>());
+            score.updateScores(inputScore);
+            report.updateReport(subject, score);
+        } else {
+            Score score = report.getReport().get(subject);
+            if(score.getScores().size() >= 10){
+                System.out.println("이미 10회차까지 등록되었습니다. 더 이상 등록할 수 없습니다.");
+                return;
+            }
+            score.updateScores(inputScore);
         }
-
-        scoreRepository.create(studentId,subject,round,score);
-
+        int scoreSize = report.getReport().get(subject).getScores().size();
+        System.out.println( subject.name() + " "  + scoreSize + "회차 "+ inputScore + "점" +" 점수 등록 성공!");
     }
 
     // 수강생의 과목별 회차 점수 수정
@@ -310,16 +312,31 @@ public class CampManagementApplication {
                 int round = sc.nextInt();
                 sc.nextLine();
 
-                Score score = scoreRepository.readScore(subjectId, id, round);
-                if (score != null) {
-                    System.out.println("과목 : " + Subject.findById(score.getSubjectId()));
-                    System.out.println("회차 : " + score.getRound() + "회차");
-                    System.out.println("점수 : " + score.getScore() + "점");
+                if (round <= 0 || round > 10) {
+                    System.out.println("회차는 1부터 10까지 입력 가능합니다...");
+                    System.out.println("점수 관리 화면으로 이동합니다...");
+                    Thread.sleep(1000);
+                    return;
+                }
+
+                // 수강생의 특정 과목 점수 리스트(회차별)를 꺼내는 로직
+                Report report = student.getReport();    // 수강생의 성적표 클래스
+                Map<Subject, Score> reportMap = report.getReport();   // 수강생의 과목별 성적표 Map
+                Score score = reportMap.get(Subject.findById(subjectId)); // 입력한 과목 ID에 해당하는 성적표 클래스
+                ArrayList<Map.Entry<Integer, String>> scores = score.getScores();   // 입력한 과목 ID에 해당하는 성적표 리스트
+
+                if (scores.size() >= round) {
+                    Map.Entry<Integer, String> scoreMap = scores.get(round - 1);  // 입력한 과목 ID 및 회차에 해당하는 점수, 등급 EntrySet
+                    int beforeScore = scoreMap.getKey();  // 입력한 과목 ID 및 회차에 해당하는 점수
+
+                    System.out.println("과목 : " + Subject.findById(subjectId));
+                    System.out.println("회차 : " + round + "회차");
+                    System.out.println("점수 : " + beforeScore + "점");
                     System.out.print("수정할 점수를 입력해주세요...");
                     int updateScore = sc.nextInt();
                     sc.nextLine();
                     if (updateScore >= 0 && updateScore <= 100) {
-                        scoreRepository.update(score.getId(), updateScore);
+                        score.updateScores(updateScore, round);
                     } else {
                         System.out.println("점수는 0부터 100까지 입력 가능합니다...");
                         System.out.println("점수 관리 화면으로 이동합니다...");
