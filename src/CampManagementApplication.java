@@ -100,12 +100,12 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
-        //현재 등록된 수강생 ID 리스트를 받아서
-        ArrayList<Integer> idList = new ArrayList<>();
-        //학생 객체 생성 후 ID값 1증가
+
+        //학생 인스턴스 생성
         int id = StudentRepository.getStoreSize() + 1;
         Student student = new Student(id,studentName);
         boolean success = false;
+
         //조건을 충족하는 과목들을 선택할때 까지 반복
         while(!success) {
             //과목 선택
@@ -178,11 +178,11 @@ public class CampManagementApplication {
             } else {
                 System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
             }
-
         }
         //저장소에 학생 객체 등록
         studentRepository.registerStudent(student);
         System.out.println("수강생 등록 성공!\n");
+        System.out.println("학생의 ID는 "+id+"입니다.");
     }
 
     // 수강생 목록 조회

@@ -28,6 +28,14 @@ public class StudentRepository {
             return store.size();
     }
 
+    public static ArrayList<String> getStudentName() {
+        ArrayList<String> names = new ArrayList<>();
+        for (Student student : store) {
+            names.add(student.getName());
+        }
+        return names;
+    }
+
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
     public void printStudents() {
