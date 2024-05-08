@@ -242,10 +242,7 @@ public class CampManagementApplication {
 
             // 수정할 과목ID 입력
             System.out.print("수정할 과목의 ID를 입력해주세요...");
-            for (Subject subject : Subject.values()) {
-                System.out.print(" " + subject.getId() + ". " + subject); // 반복문으로 enum에 저장된 값 출력
-            }
-            System.out.print("...");
+            Subject.printList();
             int subjectId = sc.nextInt();
             sc.nextLine();
 
