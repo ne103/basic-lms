@@ -2,12 +2,13 @@
 import model.Score;
 import model.Student;
 import model.Subject;
+
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.Arrays;
 /**
  * Notification
  * Java, 객체지향이 아직 익숙하지 않은 분들은 위한 소스코드 틀입니다.
@@ -28,7 +29,6 @@ public class CampManagementApplication {
     private static StudentRepository studentRepository = new StudentRepository();
     private static ScoreRepository scoreRepository = new ScoreRepository();
 
-    private static int studentIndex;
 
     // 스캐너
     private static Scanner sc = new Scanner(System.in);
@@ -36,7 +36,7 @@ public class CampManagementApplication {
     public static void main(String[] args) {
         // 더미 데이터 입력
         studentRepository.setTestData();
-        scoreRepository.setTestData();
+//        scoreRepository.setTestData();
 
         try {
             displayMainView();
@@ -99,23 +99,10 @@ public class CampManagementApplication {
         String studentName = sc.next();
         //버퍼에서 \n값 빼기
         sc.nextLine();
-        //ID 중복 확인 (더미 데이터 빼면 사실상 필요 없음)
-        //현재 등록된 수강생 ID 리스트를 받아서
-        ArrayList<Integer> idList = new ArrayList<>();
-        studentRepository.getStudentID(idList);
-        //새로 등록할 ID가 기존 ID 리스트에 포함되있는지 확인
-        boolean success = false;
-        while(!success) {
-            if (idList.contains(studentIndex)) {
-                studentIndex++; //있으면 ID값 1증가 후 루프로 돌아가 다시 검증
-            } else {
-                success = true; //없으면 루프 빠져나옴
-            }
-        }
-        //학생 객체 생성 후 ID값 1증가
-        Student student = new Student(studentIndex++,studentName);
-        success = false;
+        //학생 인스턴스 생성
+        Student student =new Student(studentName);
         //조건을 충족하는 과목들을 선택할때 까지 반복
+        boolean success = false;
         while(!success) {
             //과목 선택
             System.out.println("3개 이상의 필수 과목, 2개 이상의 선택 과목 선택");
@@ -123,38 +110,30 @@ public class CampManagementApplication {
             System.out.println("선택 과목 : 6.DEGINE_PATTERN, 7.SPRING_SECURITY, 8.REFIS, 9.MONGODB");
             System.out.print("등록할 과목 입력(숫자/띄어쓰기): ");
             String[] subject = sc.nextLine().split(" ");
-            //리스트 생성 후 선택한 과목을 추가
-            ArrayList<Subject> subjectList = new ArrayList<>();
-            // 추가로 필수과목,선택과목 개수 세기
-            int essential=0;
-            int select=0;
-            for (String s : subject) {
-                switch (s) {
-                    case "1" -> {subjectList.add(Subject.JAVA); essential++;}
-                    case "2" -> {subjectList.add(Subject.OOP); essential++;}
-                    case "3" -> {subjectList.add(Subject.SPRING); essential++;}
-                    case "4" -> {subjectList.add(Subject.JPA); essential++;}
-                    case "5" -> {subjectList.add(Subject.MYSQL); essential++;}
-                    case "6" -> {subjectList.add(Subject.DEGINE_PATTERN); select++;}
-                    case "7" -> {subjectList.add(Subject.SPRING_SECURITY); select++;}
-                    case "8" -> {subjectList.add(Subject.REDIS); select++;}
-                    case "9" -> {subjectList.add(Subject.MONGODB); select++;}
-                }
-            }
-            //과목 개수로 조건 충족 확인
-            if (essential >= 3 && select >= 2) {
-                success = true;
-                //과목을 추가한 리스트를 학생 객체의 과목 리스트로 전달
-                student.setSubjectList(subjectList);
-            } else {
-                System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
-            }
 
+            try {
+                int[] subjectId = Arrays.stream(subject).mapToInt(Integer::parseInt).toArray();
+                //학생 과목 등록
+                student.subjectRegister(subjectId);
+                //조건 충족 판별
+                if (student.determineRequirementMet()) {
+                    success = true;
+                    //조건 충족 시 저장소에 저장
+                    studentRepository.registerStudent(student);
+                } else {
+                    //조건 불충족 시 등록 한 과목 삭제
+                    student.subjectListClear();
+                    System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
+                }
+            } catch (Exception e) {
+                System.out.println("과목은 숫자로 입력하시고 각 과목을 띄어쓰기로 구분해주세요");
+            }
         }
-        //저장소에 학생 객체 등록
-        studentRepository.registerStudent(student);
-        System.out.println("수강생 등록 성공!\n");
+        System.out.println("수강생 등록 성공!");
+        System.out.println("해당 학생의 ID는 "+student.getId()+"입니다.");
     }
+
+
 
     // 수강생 목록 조회
     private static void inquireStudent() {
@@ -263,10 +242,7 @@ public class CampManagementApplication {
 
             // 수정할 과목ID 입력
             System.out.print("수정할 과목의 ID를 입력해주세요...");
-            for (Subject subject : Subject.values()) {
-                System.out.print(" " + subject.getId() + ". " + subject); // 반복문으로 enum에 저장된 값 출력
-            }
-            System.out.print("...");
+            Subject.printList();
             int subjectId = sc.nextInt();
             sc.nextLine();
 

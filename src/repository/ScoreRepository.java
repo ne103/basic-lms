@@ -60,10 +60,6 @@ public class ScoreRepository {
         store.get(studentId).stream().filter(o -> o.getId() == id).findFirst().ifPresent(score -> score.setScore(updateScore));
     }
 
-
-
-
-
     // -------------------------------선택----------------------------------
     /*read
      * 1. 수강생의 과목별 평균 등급을 조회할 수 있습니다.

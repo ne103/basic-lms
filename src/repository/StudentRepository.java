@@ -22,12 +22,9 @@ public class StudentRepository {
     public void registerStudent(Student student) {
             store.add(student);
     }
-
-    //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
-    public void getStudentID(ArrayList<Integer> idList) {
-            for (Student student : store) {
-                idList.add(student.getId());
-            }
+    //현재 저장 된 학생 수
+    public static int getStoreSize() {
+        return store.size();
     }
 
     /*read
