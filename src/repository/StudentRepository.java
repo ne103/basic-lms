@@ -1,5 +1,6 @@
 package repository;
 
+import javax.print.attribute.standard.PresentationDirection;
 import model.Student;
 import model.Subject;
 
@@ -29,7 +30,7 @@ public class StudentRepository {
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
-    public void printStudents() {
+    public void printAllStudents() {
         for (int i = 0; i < store.size(); i++) {
             System.out.println("--------------------------");
             System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
@@ -72,6 +73,73 @@ public class StudentRepository {
      * 수강생 정보를 조회할 수 있습니다.
      * 상태별 수강생 목록을 조회할 수 있습니다.*/
 
+    // 수강생 정보 조회
+    public void printStudentInfo(String studentName) {
+        boolean flag = false;
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getName().equals(studentName)) {
+                System.out.println("--------------------------");
+                System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
+                System.out.println("--------------------------\n");
+                flag = true;
+            }
+        }
+        if (flag != true) {
+            System.out.println("입력한 이름의 학생을 찾지 못했습니다.");
+        }
+    }
+
+    // 상태가 red인 학생들 출력
+    public void printStudentsRed() {
+        boolean flag = false;
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getState().toLowerCase().equals("red")) {
+                System.out.println("--------------------------");
+                System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
+                System.out.println("--------------------------\n");
+                flag = true;
+            }
+        }
+        if (flag != true) {
+            System.out.println("잘못 입력하셨습니다. 이전으로 돌아갑니다.");
+        }
+    }
+
+    // 상태가 Yellow인 학생들 출력
+    public void printStudentsYellow() {
+        boolean flag = false;
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getState().toLowerCase().equals("yellow")) {
+                System.out.println("--------------------------");
+                System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
+                System.out.println("--------------------------\n");
+                flag = true;
+            }
+        }
+        if (flag != true) {
+            System.out.println("잘못 입력하셨습니다. 이전으로 돌아갑니다.");
+        }
+    }
+
+    //상태가 Green인 학생들 출력
+    public void printStudentsGreen() {
+        boolean flag = false;
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getState().toLowerCase().equals("green")) {
+                System.out.println("--------------------------");
+                System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
+                System.out.println("--------------------------\n");
+                flag = true;
+            }
+        }
+        if (flag != true) {
+            System.out.println("잘못 입력하셨습니다. 이전으로 돌아갑니다.");
+        }
+    }
+
+
+
+
     /*update
      * 수강생 상태를 관리할 수 있습니다. (변경)
      * 수강생 정보를 수정할 수 있습니다. (이름 or 상태를 입력받아 수정)*/
@@ -81,24 +149,5 @@ public class StudentRepository {
     * 수강생 삭제시 해당 수강생의 점수 기록도 함께 삭제됩니다.*/
 
 
-    // TODO: 추후 삭제 (더미 데이터 생성코드)
-    public void setTestData(){
-        Student student1 = new Student(1,"김준혁");
-        student1.getSubjectList().addAll(Arrays.stream(Subject.values()).toList());
-        Student student2 = new Student(2,"이도윤");
-        student2.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JAVA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
-        Student student3 = new Student(3,"박하준");
-        student3.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
-        Student student4 = new Student(4,"최이안");
-        student4.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JAVA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
-        Student student5 = new Student(5,"강연우");
-        student5.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
-
-        store.add(student1);
-        store.add(student2);
-        store.add(student3);
-        store.add(student4);
-        store.add(student5);
-    }
 }
 

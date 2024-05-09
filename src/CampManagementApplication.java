@@ -35,7 +35,7 @@ public class CampManagementApplication {
 
     public static void main(String[] args) {
         // 더미 데이터 입력
-        studentRepository.setTestData();
+//        studentRepository.setTestData();
 //        scoreRepository.setTestData();
 
         try {
@@ -97,10 +97,13 @@ public class CampManagementApplication {
     // 수강생 등록
     private static void createStudent() {
         boolean success = false;
-
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
+
+        System.out.print("수강생 상태 입력 (Green, Yellow, Red) : ");
+        String state = sc.next();
+
         //버퍼에서 \n값 빼기
         sc.nextLine();
 
@@ -130,7 +133,7 @@ public class CampManagementApplication {
 
             try {
                 int[] subjectId = Arrays.stream(subject).mapToInt(Integer::parseInt).toArray();
-                //수강생 과목 등록
+                //학생 과목 등록
                 student.registerSubject(subjectId);
                 //조건 충족 판별
                 if (student.determineRequirementMet(student.countEssential(), student.countNonEssential())) {
@@ -150,10 +153,26 @@ public class CampManagementApplication {
         System.out.println("해당 수강생의 ID는 "+student.getId()+"입니다.");
     }
 
+    //수강생 상태 관리
+    private static void managingStudent() {
+
+    }
+
+
+    //수강생 검색
+    private static void searchStudent() {
+        System.out.println("==================================");
+        System.out.print("수강생 이름을 입력하세요...");
+        String studentName = sc.next();
+        studentRepository.printStudentInfo(studentName);
+    }
+
+
+
     // 수강생 목록 조회
     private static void inquireStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
-        studentRepository.printStudents();// 기능 구현
+        studentRepository.printAllStudents();// 기능 구현
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -240,6 +259,32 @@ public class CampManagementApplication {
 
 
 
+
+    //상태별 수강생 목록
+    private static void stateListStudent(){
+        boolean flag = true;
+        while (flag) {
+            System.out.println("==================================");
+            System.out.println("상태별 수강생 목록 실행 중...");
+            System.out.println("1. Green");
+            System.out.println("2. Yellow");
+            System.out.println("3. Red");
+            System.out.println("4. 이전 으로 이동");
+            System.out.print("조회 항목을 선택하세요...");
+            int input = sc.nextInt();
+
+            switch (input) {
+                case 1 -> studentRepository.printStudentsGreen(); //상태가 Green 인 학생들 출력
+                case 2 -> studentRepository.printStudentsYellow(); // 상태가 Yellow 인 학생들 출력
+                case 3 -> studentRepository.printStudentsRed(); // 상태가 Red 인 학생들 출력
+                case 4 -> flag = false; // 이전 으로 이동
+                default -> {
+                    System.out.println("잘못된 입력입니다.\n 이전으로...");
+                    flag = false;
+                }
+            }
+        }
+    }
 
     private static void displayScoreView() throws InterruptedException {
         boolean flag = true;
