@@ -39,7 +39,12 @@ public enum Subject {
         return null;
     }
 
-
-
+    //전체 과목 리스트 이쁘게 출력
+    public static void printList() {
+        for (Subject subject : Subject.values()) {
+            System.out.print(" " + subject.getId() + ". " + subject); // 반복문으로 enum에 저장된 값 출력
+        }
+        System.out.print("...");
+    }
 }
 

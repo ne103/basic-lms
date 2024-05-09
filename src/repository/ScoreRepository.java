@@ -26,19 +26,6 @@ public class ScoreRepository {
     }
 
     /*
-    * 과목id와 학생id를 통해서 학생의 해당 과목의 회차리스트를 반환합니다.
-    * ex) 김준현 학생의 JAVA 과목 회차들 (1,2,3,4,5회차)를 반환*/
-    public ArrayList<Score> findByIds(int subjectId, int studentId){
-        ArrayList<Score> list = new ArrayList<>();
-        for (Score score : store.get(studentId)) {
-            if (score.getSubjectId() == subjectId){
-                list.add(score);
-            }
-        }
-        return list;
-    }
-
-    /*
     * 회차가 존재하는지 판별합니다.*/
     public boolean hasRound(int studentId, Subject subject, int round){
         ArrayList<Score> scores = store.get(studentId);
@@ -58,8 +45,10 @@ public class ScoreRepository {
      * 수강생 등급을 조회할 수 있습니다*/
     // 수강생의 수정할 과목의 회차의 점수 조회
     public Score readScore(int subjectId, int studentId, int round) {
+        if(store.get(studentId) == null){
+            return null;
+        }
         return store.get(studentId).stream().filter(o -> o.getSubjectId() == subjectId)
-                             .filter(o -> o.getStudentId() == studentId)
                              .filter(o -> o.getRound() == round)
                              .findFirst()
                              .orElse(null);
@@ -70,10 +59,6 @@ public class ScoreRepository {
     public void update(int studentId, int id, int updateScore) {
         store.get(studentId).stream().filter(o -> o.getId() == id).findFirst().ifPresent(score -> score.setScore(updateScore));
     }
-
-
-
-
 
     // -------------------------------선택----------------------------------
     /*read
