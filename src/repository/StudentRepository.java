@@ -32,7 +32,7 @@ public class StudentRepository {
 
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
-    public void printStudents() {
+    public void printAllStudents() {
         for (int i = 0; i < store.size(); i++) {
             System.out.println("--------------------------");
             System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
