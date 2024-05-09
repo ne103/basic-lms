@@ -8,7 +8,6 @@ public class Student {
 
     private final int id;
     private String name;
-    private String state;
     private ArrayList<Subject> subjectList;
     private Condition condition;
 
@@ -18,7 +17,6 @@ public class Student {
 
         this.id = id;
         this.name = name;
-        this.state = state;
         this.subjectList = new ArrayList<>();
     }
 
@@ -38,9 +36,6 @@ public class Student {
         return name;
     }
 
-    public String getState() {
-        return state;
-    }
 
     public ArrayList<Subject> getSubjectList() {
         return subjectList;

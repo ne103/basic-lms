@@ -34,10 +34,6 @@ public class CampManagementApplication {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // 더미 데이터 입력
-//        studentRepository.setTestData();
-//        scoreRepository.setTestData();
-
         try {
             displayMainView();
         } catch (Exception e) {
@@ -101,9 +97,6 @@ public class CampManagementApplication {
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
 
-        System.out.print("수강생 상태 입력 (Green, Yellow, Red) : ");
-        String state = sc.next();
-
         //버퍼에서 \n값 빼기
         sc.nextLine();
 
@@ -153,10 +146,33 @@ public class CampManagementApplication {
         System.out.println("해당 수강생의 ID는 "+student.getId()+"입니다.");
     }
 
-    //수강생 상태 관리
-    private static void managingStudent() {
 
+
+    private static void inquireStudent() {
+        boolean flag = true;
+        while (flag) {
+            System.out.println("==================================");
+            System.out.println("수강생 조회 실행 중...");
+            System.out.println("1. 수강생 검색");
+            System.out.println("2. 수강생 목록");
+            System.out.println("3. 상태별 수강생 목록");
+            System.out.println("4. 이전 으로 이동");
+            System.out.print("조회 항목을 선택하세요...");
+            int input = sc.nextInt();
+
+            switch (input) {
+                case 1 -> searchStudent(); // 수강생 검색
+                case 2 -> listStudent(); // 수강생 목록
+                case 3 -> stateListStudent(); // 상태별 수강생 목록
+                case 4 -> flag = false; // 이전 으로 이동
+                default -> {
+                    System.out.println("잘못된 입력입니다.\n 이전으로...");
+                    flag = false;
+                }
+            }
+        }
     }
+
 
 
     //수강생 검색
@@ -170,12 +186,57 @@ public class CampManagementApplication {
 
 
     // 수강생 목록 조회
-    private static void inquireStudent() {
+    private static void listStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         studentRepository.printAllStudents();// 기능 구현
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
+
+    //수강생 정보 삭제
+    private static void deleteStudent(){
+        System.out.println("수강생 ID를 입력하세요:");
+        int studentId = sc.nextInt();
+        System.out.println("ID: "+studentRepository.getStudentById(studentId).getId());
+        System.out.println("Name: "+studentRepository.getStudentById(studentId).getName());
+        System.out.print("해당 수강생을 삭제하시겠습니까?(Y/N):");
+        String choice = sc.next();
+        if (choice.equals("Y")) {
+            studentRepository.removeStudentById(studentId);
+            System.out.println("수강생 삭제 완료!");
+        } else if (choice.equals("N")) {
+            System.out.println("삭제 취소");
+        }
+    }
+
+    //수강생 정보 수정
+    public static void updateStudent() {
+        System.out.print("수강생의 ID를 입력하세요:");
+        int studentId = sc.nextInt();
+
+        System.out.println("수강생 이름: "+studentRepository.findById(studentId).getName());
+        System.out.println("수강생 상태: "+studentRepository.findById(studentId).getCondition().name());
+
+        System.out.print("수정할 것을 입력하세요(1.이름 2.상태):");
+        int choice = sc.nextInt();
+
+        sc.nextLine();
+        switch (choice) {
+            case 1 -> {
+                System.out.print("변경할 이름을 입력하세요:");
+                String studentName = sc.nextLine();
+                studentRepository.findById(studentId).setName(studentName);
+                System.out.println("이름 변경 성공!");
+            }
+            case 2 -> {
+                System.out.println("1.Green 2.Red 3.Yellow");
+                System.out.print("변경할 상태를 입력하세요:");
+                int condition = sc.nextInt();
+                studentRepository.findById(studentId).chageConditionByNum(condition);
+                System.out.println("상태 변경 성공!");
+            }
+        }
+    }
     //수강생 정보 관리
     public static void manageStudent() {
         boolean flag = true;
@@ -189,65 +250,9 @@ public class CampManagementApplication {
             int input = sc.nextInt();
 
             switch (input) {
-                case 1 -> { // 수강생 상태 확인
-                    boolean success = false;
-                    while(!success){
-                        try {
-                            System.out.print("수강생 ID를 입력하세요:");
-                            int studentId = sc.nextInt();
-                            sc.nextLine();
-                            System.out.println("확인");
-                            System.out.println("해당 수강생의 상태는 " + studentRepository.findById(studentId).getCondition().name() + "입니다.");
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("ID를 잘 못 입력했습니다.");
-                        }
-                    }
-
-
-                }
-                case 2 -> { // 수강생 정보 수정
-                    System.out.print("수강생의 ID를 입력하세요:");
-                    int studentId = sc.nextInt();
-                    System.out.println("수강생 이름: "+studentRepository.findById(studentId).getName());
-                    System.out.println("수강생 상태: "+studentRepository.findById(studentId).getCondition().name());
-                    System.out.print("수정할 것을 입력하세요(1.이름 2.상태):");
-                    int choice = sc.nextInt();
-                    sc.nextLine();
-                    switch (choice) {
-                        case 1 -> {
-                            System.out.print("변경할 이름을 입력하세요:");
-                            String studentName = sc.nextLine();
-                            studentRepository.findById(studentId).setName(studentName);
-                            System.out.println("이름 변경 성공!");
-                        }
-                        case 2 -> {
-                            System.out.println("1.Green 2.Red 3.Yellow");
-                            System.out.print("변경할 상태를 입력하세요:");
-                            int condition = sc.nextInt();
-                            studentRepository.findById(studentId).chageConditionByNum(condition);
-                            System.out.println("상태 변경 성공!");
-                        }
-                    }
-                }
-                case 3 -> { // 수강생 삭제
-                    System.out.println("수강생 ID를 입력하세요:");
-                    int studentId = sc.nextInt();
-                    System.out.println("ID: "+studentRepository.getStudentById(studentId).getId());
-                    System.out.println("Name: "+studentRepository.getStudentById(studentId).getName());
-                    System.out.print("해당 수강생을 삭제하시겠습니까?(Y/N):");
-                    String choice = sc.next();
-                    if (choice.equals("Y")) {
-                        studentRepository.removeStudentById(studentId);
-                        System.out.println("수강생 삭제 완료!");
-                    } else if (choice.equals("N")) {
-                        System.out.println("삭제 취소");
-                        flag = false;
-                    }
-
-
-                }
-                case 4 -> flag = false; // 메인 화면 이동
+                case 1 -> updateStudent();// 수강생 정보 수정
+                case 2 -> deleteStudent(); // 수강생 삭제
+                case 3 -> flag = false; // 이전 화면 이동
                 default -> {
                     System.out.println("잘못된 입력입니다.\n수강생 관리 화면 이동...");
                     flag = false;
@@ -255,8 +260,6 @@ public class CampManagementApplication {
             }
         }
     }
-
-
 
 
 
