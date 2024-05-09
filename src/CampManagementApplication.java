@@ -596,6 +596,7 @@ public class CampManagementApplication {
         List<Student> students = studentRepository.findByCondition(condition);
         if (students.isEmpty()) {
             System.out.println("해당 상태의 수강생이 존재하지 않습니다.");
+            Thread.sleep(1000);
             return;
         }
 
