@@ -5,11 +5,13 @@ import java.util.ArrayList;
 public class Student {
     private final int id;
     private String name;
+    private String state;
     private ArrayList<Subject> subjectList;
 
-    public Student(int id, String name) {
+    public Student(int id, String name, String state) {
         this.id = id;
         this.name = name;
+        this.state = state;
         this.subjectList = new ArrayList<>();
     }
 
@@ -19,6 +21,10 @@ public class Student {
 
     public String getName() {
         return name;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public ArrayList<Subject> getSubjectList() {

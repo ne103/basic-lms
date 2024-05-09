@@ -75,7 +75,7 @@ public class CampManagementApplication {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
-            System.out.println("2. 수강생 목록 조회");
+            System.out.println("2. 수강생 조회");
             System.out.println("3. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
@@ -92,13 +92,45 @@ public class CampManagementApplication {
         }
     }
 
+    private static void inquireStudent() {
+        boolean flag = true;
+        while (flag) {
+            System.out.println("==================================");
+            System.out.println("수강생 조회 실행 중...");
+            System.out.println("1. 수강생 검색");
+            System.out.println("2. 수강생 목록");
+            System.out.println("3. 상태별 수강생 목록");
+            System.out.println("4. 이전 으로 이동");
+            System.out.print("조회 항목을 선택하세요...");
+            int input = sc.nextInt();
+
+            switch (input) {
+                case 1 -> searchStudent(); // 수강생 검색
+                case 2 -> listStudent(); // 수강생 목록
+                case 3 -> stateListStudent(); // 상태별 수강생 목록
+                case 4 -> flag = false; // 이전 으로 이동
+                default -> {
+                    System.out.println("잘못된 입력입니다.\n 이전으로...");
+                    flag = false;
+                }
+            }
+        }
+    }
+
     // 수강생 등록
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         String studentName = sc.next();
+
+        sc.nextLine();
+
+        System.out.print("수강생 상태 입력 (Green, Yellow, Red) : ");
+        String state = sc.next();
+
         //버퍼에서 \n값 빼기
         sc.nextLine();
+
         //ID 중복 확인 (더미 데이터 빼면 사실상 필요 없음)
         //현재 등록된 수강생 ID 리스트를 받아서
         ArrayList<Integer> idList = new ArrayList<>();
@@ -112,8 +144,9 @@ public class CampManagementApplication {
                 success = true; //없으면 루프 빠져나옴
             }
         }
+
         //학생 객체 생성 후 ID값 1증가
-        Student student = new Student(studentIndex++,studentName);
+        Student student = new Student(studentIndex++,studentName, state);
         success = false;
         //조건을 충족하는 과목들을 선택할때 까지 반복
         while(!success) {
@@ -156,11 +189,45 @@ public class CampManagementApplication {
         System.out.println("수강생 등록 성공!\n");
     }
 
-    // 수강생 목록 조회
-    private static void inquireStudent() {
+    //수강생 검색
+    private static void searchStudent() {
+        System.out.println("==================================");
+        System.out.print("수강생 이름을 입력하세요...");
+        String studentName = sc.next();
+        studentRepository.printStudentInfo(studentName);
+    }
+
+    // 수강생 목록
+    private static void listStudent() {
         System.out.println("\n수강생 목록을 조회합니다...");
         studentRepository.printAllStudents();// 기능 구현
         System.out.println("\n수강생 목록 조회 성공!");
+    }
+
+    //상태별 수강생 목록
+    private static void stateListStudent(){
+        boolean flag = true;
+        while (flag) {
+            System.out.println("==================================");
+            System.out.println("상태별 수강생 목록 실행 중...");
+            System.out.println("1. Green");
+            System.out.println("2. Yellow");
+            System.out.println("3. Red");
+            System.out.println("4. 이전 으로 이동");
+            System.out.print("조회 항목을 선택하세요...");
+            int input = sc.nextInt();
+
+            switch (input) {
+                case 1 -> studentRepository.printStudentsGreen(); //상태가 Green 인 학생들 출력
+                case 2 -> studentRepository.printStudentsYellow(); // 상태가 Yellow 인 학생들 출력
+                case 3 -> studentRepository.printStudentsRed(); // 상태가 Red 인 학생들 출력
+                case 4 -> flag = false; // 이전 으로 이동
+                default -> {
+                    System.out.println("잘못된 입력입니다.\n 이전으로...");
+                    flag = false;
+                }
+            }
+        }
     }
 
     private static void displayScoreView() throws InterruptedException {
