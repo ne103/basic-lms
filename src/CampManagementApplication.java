@@ -114,9 +114,9 @@ public class CampManagementApplication {
             try {
                 int[] subjectId = Arrays.stream(subject).mapToInt(Integer::parseInt).toArray();
                 //학생 과목 등록
-                student.subjectRegister(subjectId);
+                student.registerSubject(subjectId);
                 //조건 충족 판별
-                if (student.determineRequirementMet()) {
+                if (student.determineRequirementMet(student.countEssential(), student.countNonEssential())) {
                     success = true;
                     //조건 충족 시 저장소에 저장
                     studentRepository.registerStudent(student);
@@ -133,7 +133,13 @@ public class CampManagementApplication {
         System.out.println("해당 학생의 ID는 "+student.getId()+"입니다.");
     }
 
+    //수강생 상태 관리
+    private static void managingStudent() {
 
+    }
+
+
+    //수강생 삭제
 
     // 수강생 목록 조회
     private static void inquireStudent() {
