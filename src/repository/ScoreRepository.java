@@ -5,6 +5,9 @@ import model.Subject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 public class ScoreRepository {
     private static HashMap<Integer, ArrayList<Score>> store = new HashMap<>();
@@ -62,9 +65,31 @@ public class ScoreRepository {
 
     // -------------------------------선택----------------------------------
     /*read
-     * 1. 수강생의 과목별 평균 등급을 조회할 수 있습니다.
-     *
-     * 2. 특정 상태 수강생들의 필수 과목 평균 등급을 조회합니다. */
+     * 1. 수강생의 과목별 평균 등급을 조회할 수 있습니다.*/
+    public String average(int studentId, int subjectId) {
+//        ArrayList<Score> scores = store.get(studentId);
+//        int sumScore = 0;
+//        int count = 0;
+//
+//        for (Score score : scores) {
+//            if (score.getSubjectId() == subjectId) {
+//                count++;
+//                sumScore += score.getScore();
+//            }
+//        }
+//        int avgScore = sumScore / count;
+//        return Score.scoreToGrade(subjectId, avgScore);
+
+        ArrayList<Score> scores = store.get(studentId);
+        OptionalDouble average = scores.stream()
+                                       .filter(o -> o.getSubjectId() == subjectId)
+                                       .mapToInt(Score::getScore)
+                                       .average();
+        int avgScore = (int) Math.floor(average.getAsDouble());
+        return Score.scoreToGrade(subjectId, avgScore);
+    }
+
+     /* 2. 특정 상태 수강생들의 필수 과목 평균 등급을 조회합니다. */
 
     /*delete
      * 수강생이 삭제될 때 같이 해당 학생의 점수들도 삭제
