@@ -23,12 +23,9 @@ public class StudentRepository {
     public void registerStudent(Student student) {
             store.add(student);
     }
-
-    //ArrayList를 받아서 전체 수강생 ID들을 담아줍니다
-    public void getStudentID(ArrayList<Integer> idList) {
-            for (Student student : store) {
-                idList.add(student.getId());
-            }
+    //현재 저장 된 학생 수
+    public static int getStoreSize() {
+        return store.size();
     }
 
     /*read
@@ -141,6 +138,7 @@ public class StudentRepository {
         student1.getSubjectList().addAll(Arrays.stream(Subject.values()).toList());
         Student student2 = new Student(2,"이도윤", "red");
         student2.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JAVA, Subject.OOP, Subject.SPRING, Subject.MONGODB, Subject.MYSQL)));
+
         Student student3 = new Student(3,"박하준", "Yellow");
         student3.getSubjectList().addAll(new ArrayList<>(Arrays.asList(Subject.JPA, Subject.OOP, Subject.JPA, Subject.MONGODB, Subject.MYSQL)));
         Student student4 = new Student(4,"최이안", "Yellow");
