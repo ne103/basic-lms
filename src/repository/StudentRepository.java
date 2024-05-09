@@ -37,6 +37,23 @@ public class StudentRepository {
         }
     }
 
+    public Student getStudentById (int id) {
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getId() == id) {
+                return store.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void removeStudentById(int id) {
+        for (int i = 0; i < store.size(); i++) {
+            if (store.get(i).getId() == id) {
+                store.remove(i);
+            }
+        }
+    }
+
     // 학생id를 사용해서 StudentRepository에 저장되어있는 학생을 찾아 반환합니다.
     // 없으면 null을 반환하고, null을 실패조건으로 사용했습니다.
     public Student findById(int id){

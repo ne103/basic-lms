@@ -4,10 +4,11 @@ import repository.StudentRepository;
 import java.util.ArrayList;
 
 public class Student {
+    public enum Condition {Green,Red,Yellow}
     private final int id;
     private String name;
     private ArrayList<Subject> subjectList;
-
+    private Condition condition;
 
     //생성자 오버로딩
     public Student(int id, String name) {
@@ -17,10 +18,11 @@ public class Student {
     }
 
     //생성자 오버로딩
-    public Student(String name) {
+    public Student(String name,Condition condition) {
         this.id = StudentRepository.getStoreSize() +1;
         this.name = name;
         this.subjectList = new ArrayList<>();
+        this.condition = condition;
     }
 
     public int getId() {
@@ -67,10 +69,12 @@ public class Student {
             return false;
         }
     }
+
     //과목 리스트를 비웁니다.
     public void subjectListClear() {
         subjectList.clear();
     }
+
 
     //과목 ID를 받아서 해당 과목을 과목 리스트에 넣습니다.
     public void registerSubject(int[] subjectId){
@@ -84,4 +88,28 @@ public class Student {
     public boolean checkSubjectExist(Subject subject) {
         return subjectList.contains(subject);
     }
+
+    //문자열 상태를 입력 받아서 해당 상태의 Condition 상태를 반환합니다.
+    public static Condition stringToCondition(String value) {
+        return Condition.valueOf(value);
+    }
+
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //정수값을 받아서 수강생 상태 변경
+    public void chageConditionByNum(int num) {
+        switch (num) {
+            case 1 -> condition = Condition.Green;
+            case 2 -> condition = Condition.Red;
+            case 3 -> condition = Condition.Yellow;
+        }
+    }
+
+
 }
