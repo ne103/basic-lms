@@ -321,13 +321,16 @@ public class CampManagementApplication {
             System.out.println("==================================");
             System.out.println("평균 등급 조회 실행 중...");
             System.out.println("1. 수강생의 과목별 평균 등급 조회");
-            System.out.println("2. 뒤로가기");
+            System.out.println("2. 수강생의 과목별 평균 등급 조회");
+            System.out.println("3. 뒤로가기");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
+            sc.nextLine();
 
             switch (input) {
                 case 1 -> inquireGradeBySubject();
-                case 2 -> displayScoreView();
+                case 2 -> stateAverage();
+                case 3 -> displayScoreView();
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -569,6 +572,35 @@ public class CampManagementApplication {
         System.out.println("과목: " + subject.name());
         System.out.println("평균 등급: " + avgScore + "등급");
         System.out.println("==================================");
+        System.out.println("\n평균 등급 조회 성공!");
+    }
+
+    // 수강생의 과목별 평균 등급 조회
+    private static void stateAverage() throws InterruptedException {
+
+        System.out.println("특정 상태 수강생의 필수과목 평균 등급을 조회합니다...");
+        // 학생 id 입력 및 존재 확인
+        System.out.print("조회할 학생의 상태를 입력하세요 : ");
+        boolean success = false;
+        String condition="";
+        //수강생 상태 입력 받기. Green Red Yellow 아니면 다시 받음
+        while(!success) {
+            System.out.print("수강생의 상태를 입력하세요(Green, Red, Yellow):");
+            condition = sc.nextLine();
+            if(condition.equals("Green")||condition.equals("Red")||condition.equals("Yellow")) {
+                success = true;
+            } else {
+                System.out.println("다시 입력하세요.");
+            }
+        }
+        List<Student> students = studentRepository.findByCondition(condition);
+        if (students.isEmpty()) {
+            System.out.println("해당 상태의 수강생이 존재하지 않습니다.");
+            return;
+        }
+
+        scoreRepository.inquireGradeByCondition(students);
+
         System.out.println("\n평균 등급 조회 성공!");
     }
 }

@@ -3,6 +3,8 @@ package repository;
 import model.Student;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentRepository {
     private static ArrayList<Student> store = new ArrayList<>(); // Map으로도 관리할 수 있음
@@ -93,6 +95,13 @@ public class StudentRepository {
         if (flag != true) {
             System.out.println("입력한 이름의 학생을 찾지 못했습니다.");
         }
+    }
+
+    //상태별 수강생 리스트 조회
+    public List<Student> findByCondition(String condition) {
+        return store.stream()
+                    .filter(o -> o.getCondition().toString().equals(condition))
+                    .collect(Collectors.toList());
     }
 
     // 상태가 red인 학생들 출력

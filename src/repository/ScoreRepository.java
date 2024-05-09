@@ -1,13 +1,13 @@
 package repository;
 
 import model.Score;
+import model.Student;
 import model.Subject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.OptionalDouble;
-import java.util.stream.Collectors;
 
 public class ScoreRepository {
     private static HashMap<Integer, ArrayList<Score>> store = new HashMap<>();
@@ -89,7 +89,20 @@ public class ScoreRepository {
         return Score.scoreToGrade(subjectId, avgScore);
     }
 
-     /* 2. 특정 상태 수강생들의 필수 과목 평균 등급을 조회합니다. */
+    /* 2. 특정 상태 수강생들의 필수 과목 평균 등급을 조회합니다. */
+    public void inquireGradeByCondition(List<Student> students) {
+        for (Student student : students) {
+            System.out.println("수강생 이름 : " + student.getName());
+            List<Integer> subjectIds = student.getSubjectList().stream()
+                                              .filter(Subject::isEssential)
+                                              .map(Subject::getId)
+                                              .toList();
+            for (Integer subjectId : subjectIds) {
+                System.out.println("필수과목 : " + Subject.findById(subjectId));
+                System.out.println("등급 : " + average(student.getId(), subjectId));
+            }
+        }
+    }
 
     /*delete
      * 수강생이 삭제될 때 같이 해당 학생의 점수들도 삭제
