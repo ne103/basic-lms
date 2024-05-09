@@ -79,7 +79,7 @@ public class StudentRepository {
     public void printStudentsRed() {
         boolean flag = false;
         for (int i = 0; i < store.size(); i++) {
-            if (store.get(i).getState().equals("Red")) {
+            if (store.get(i).getState().toLowerCase().equals("red")) {
                 System.out.println("--------------------------");
                 System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
                 System.out.println("--------------------------\n");
@@ -95,7 +95,7 @@ public class StudentRepository {
     public void printStudentsYellow() {
         boolean flag = false;
         for (int i = 0; i < store.size(); i++) {
-            if (store.get(i).getState().equals("Yellow")) {
+            if (store.get(i).getState().toLowerCase().equals("yellow")) {
                 System.out.println("--------------------------");
                 System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
                 System.out.println("--------------------------\n");
@@ -111,7 +111,7 @@ public class StudentRepository {
     public void printStudentsGreen() {
         boolean flag = false;
         for (int i = 0; i < store.size(); i++) {
-            if (store.get(i).getState().equals("Green")) {
+            if (store.get(i).getState().toLowerCase().equals("green")) {
                 System.out.println("--------------------------");
                 System.out.println(" Id: " + store.get(i).getId() +  "\n 이름: " + store.get(i).getName() + "\n 상태: " + store.get(i).getState() + "\n 선택한 과목: " + store.get(i).getSubjectList());
                 System.out.println("--------------------------\n");
