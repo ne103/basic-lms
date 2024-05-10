@@ -198,7 +198,7 @@ public class CampManagementApplication {
         System.out.println("수강생 ID를 입력하세요:");
         int studentId = sc.nextInt();
         System.out.println("ID: "+studentRepository.getStudentById(studentId).getId());
-        System.out.println("Name: "+studentRepository.getStudentById(studentId).getName());
+        System.out.print("Name: "+studentRepository.getStudentById(studentId).getName());
         System.out.print("해당 수강생을 삭제하시겠습니까?(Y/N):");
         String choice = sc.next();
         if (choice.equals("Y")) {
