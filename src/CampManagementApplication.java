@@ -6,9 +6,8 @@ import model.Subject;
 import repository.ScoreRepository;
 import repository.StudentRepository;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Arrays;
+import java.util.*;
+
 /**
  * Notification
  * Java, 객체지향이 아직 익숙하지 않은 분들은 위한 소스코드 틀입니다.
@@ -187,8 +186,8 @@ public class CampManagementApplication {
 
     // 수강생 목록 조회
     private static void listStudent() {
-        System.out.println("\n수강생 목록을 조회합니다...");
-        studentRepository.printAllStudents();// 기능 구현
+        System.out.println("\n수강생 목록을 조회합니다...\n");
+        studentRepository.printAllStudents(); // 기능 구현
         System.out.println("\n수강생 목록 조회 성공!");
     }
 
@@ -297,15 +296,41 @@ public class CampManagementApplication {
             System.out.println("1. 수강생의 과목별 시험 회차 및 점수 등록");
             System.out.println("2. 수강생의 과목별 회차 점수 수정");
             System.out.println("3. 수강생의 특정 과목 회차별 등급 조회");
-            System.out.println("4. 메인 화면 이동");
+            System.out.println("4. 수강생의 평균 등급 조회");
+            System.out.println("5. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요...");
             int input = sc.nextInt();
 
             switch (input) {
                 case 1 -> createScore(); // 수강생의 과목별 시험 회차 및 점수 등록
                 case 2 -> updateRoundScoreBySubject(); // 수강생의 과목별 회차 점수 수정
-                case 3 -> inquireRoundGradeBySubject(); // 수강생의 특정 과목 회차별 등급 조회
-                case 4 -> flag = false; // 메인 화면 이동
+                case 3 -> inquireRoundGradeBySubject(); // 회차별 등급
+                case 4 -> displayGradeView(); // 평균 등급
+                case 5 -> flag = false; // 메인 화면 이동
+                default -> {
+                    System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
+                    flag = false;
+                }
+            }
+        }
+    }
+
+    private static void displayGradeView() throws InterruptedException {
+        boolean flag = true;
+        while (flag) {
+            System.out.println("==================================");
+            System.out.println("평균 등급 조회 실행 중...");
+            System.out.println("1. 수강생의 과목별 평균 등급 조회");
+            System.out.println("2. 수강생의 상태별 필수 과목 평균 등급 조회");
+            System.out.println("3. 뒤로가기");
+            System.out.print("관리 항목을 선택하세요...");
+            int input = sc.nextInt();
+            sc.nextLine();
+
+            switch (input) {
+                case 1 -> inquireGradeBySubject();
+                case 2 -> stateAverage();
+                case 3 -> displayScoreView();
                 default -> {
                     System.out.println("잘못된 입력입니다.\n메인 화면 이동...");
                     flag = false;
@@ -444,7 +469,7 @@ public class CampManagementApplication {
         Thread.sleep(1000);
     }
 
-    // 수강생의 특정 과목 회 차별 등급 조회
+    // 수강생의 특정 과목 회차별 등급 조회
     private static void inquireRoundGradeBySubject() {
         // 기능 구현 (조회할 특정 과목)
         System.out.println("회차별 등급을 조회합니다...");
@@ -500,5 +525,83 @@ public class CampManagementApplication {
         System.out.println("점수: " + score.getRound() + "회차 " + score.getScore() + "점 " + score.getGrade() + "등급");
         System.out.println("==========================");
         System.out.println("\n등급 조회 성공!");
+    }
+
+    // 수강생의 과목별 평균 등급 조회
+    private static void inquireGradeBySubject() throws InterruptedException {
+
+        System.out.println("과목별 평균 등급을 조회합니다...");
+        // 학생 id 입력 및 존재 확인
+        System.out.print("조회할 학생의 id를 입력하세요 : ");
+        int studentId = sc.nextInt();
+        sc.nextLine();
+        Student student = studentRepository.findById(studentId);
+        if (student == null){
+            System.out.println(studentId + "번 학생은 존재하지 않습니다.");
+            Thread.sleep(1000);
+            return;
+        }
+
+        // 학생이 수강하는 과목 리스트 출력
+        for (Subject subject : student.getSubjectList()) {
+            System.out.print(subject.getId() + ". " + subject.name() + " ");
+        }
+        System.out.println(" ");
+
+        // 과목 id 입력 및 존재 확인, 해당과목 수강하는지 확인
+        System.out.print(student.getName()+" 학생의 조회할 과목 id를 입력하세요: ");
+        int subjectId = sc.nextInt();
+        sc.nextLine();
+        Subject subject = Subject.findById(subjectId);
+        if(subject == null){
+            System.out.println("존재하지 않는 과목 id 입니다.");
+            Thread.sleep(1000);
+            return;
+        }
+
+        if(!student.checkSubjectExist(subject)){
+            System.out.println("이 학생은 해당 과목을 수강하지 않았습니다.");
+            Thread.sleep(1000);
+            return;
+        }
+
+        String avgScore = scoreRepository.average(studentId, subjectId);
+
+        System.out.println("==================================");
+        System.out.println("학생: " + studentId + ". " + student.getName());
+        System.out.println("과목: " + subject.name());
+        System.out.println("평균 등급: " + avgScore + "등급");
+        System.out.println("==================================");
+        System.out.println("\n평균 등급 조회 성공!");
+    }
+
+    // 수강생의 과목별 평균 등급 조회
+    private static void stateAverage() throws InterruptedException {
+
+        System.out.println("특정 상태 수강생의 필수 과목 평균 등급을 조회합니다...");
+        // 학생 id 입력 및 존재 확인
+        System.out.print("조회할 학생의 상태를 입력하세요 : ");
+        boolean success = false;
+        String condition="";
+        //수강생 상태 입력 받기. Green Red Yellow 아니면 다시 받음
+        while(!success) {
+            System.out.print("수강생의 상태를 입력하세요(Green, Red, Yellow):");
+            condition = sc.nextLine();
+            if(condition.equals("Green")||condition.equals("Red")||condition.equals("Yellow")) {
+                success = true;
+            } else {
+                System.out.println("다시 입력하세요.");
+            }
+        }
+        List<Student> students = studentRepository.findByCondition(condition);
+        if (students.isEmpty()) {
+            System.out.println("해당 상태의 수강생이 존재하지 않습니다.");
+            Thread.sleep(1000);
+            return;
+        }
+
+        scoreRepository.inquireGradeByCondition(students);
+
+        System.out.println("\n평균 등급 조회 성공!");
     }
 }

@@ -3,6 +3,8 @@ package repository;
 import model.Student;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentRepository {
     private static ArrayList<Student> store = new ArrayList<>(); // Map으로도 관리할 수 있음
@@ -26,10 +28,19 @@ public class StudentRepository {
     /*read
      * 수강생 목록을 조회할 수 있습니다*/
     public void printAllStudents() {
-        for (int i = 0; i < store.size(); i++) {
-            System.out.println("--------------------------");
-            System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
-            System.out.println("--------------------------\n");
+        if(store.isEmpty()){
+            System.out.println("등록된 수강생이 없습니다.");
+        }else{
+//            for (int i = 0; i < store.size(); i++) {
+//                System.out.println("--------------------------");
+//                System.out.println("Id: " + store.get(i).getId() + "\n" + "이름: " + store.get(i).getName());
+//                System.out.println("--------------------------\n");
+//            }
+            for (Student student : store) {
+                System.out.println("--------------------------");
+                System.out.println("Id: " + student.getId() + "\n" + "이름: " + student.getName());
+                System.out.println("--------------------------\n");
+            }
         }
     }
 
@@ -84,6 +95,13 @@ public class StudentRepository {
         if (flag != true) {
             System.out.println("입력한 이름의 학생을 찾지 못했습니다.");
         }
+    }
+
+    //상태별 수강생 리스트 조회
+    public List<Student> findByCondition(String condition) {
+        return store.stream()
+                    .filter(o -> o.getCondition().toString().equals(condition))
+                    .collect(Collectors.toList());
     }
 
     // 상태가 red인 학생들 출력

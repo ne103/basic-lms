@@ -52,8 +52,11 @@ public class Score {
 
     /*
     * 등급 산정하는 함수
-    * score가 변동이 있을때 실행되어야 합니다.*/
-    private String scoreToGrade(int subjectId, int score){
+    * score가 변동이 있을때 실행되어야 합니다.
+    * + 변동 뿐만 아니라 평균 등급 조회시에도 실행되어야 합니다.
+    * 평균 등급 조회를 위해 private -> public static 사용
+    * */
+    public static String scoreToGrade(int subjectId, int score){
         Subject subject = Subject.findById(subjectId);
         if (subject == null) {
             throw new IllegalArgumentException();// 예외처리?
