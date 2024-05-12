@@ -36,6 +36,7 @@ public class CampManagementApplication {
         try {
             displayMainView();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("\n오류 발생!\n프로그램을 종료합니다.");
         }
     }
@@ -107,11 +108,11 @@ public class CampManagementApplication {
             if(condition.equals("Green")||condition.equals("Red")||condition.equals("Yellow")) {
                 success = true;
             } else {
-                System.out.println("다시 입력하세요.");
+                System.out.println("Green, Red, Yellow 중 하나로 입력하세요");
             }
         }
-        //학생 인스턴스 생성
-        Student student =new Student(studentName,Student.stringToCondition(condition));
+
+
 
         //조건을 충족하는 과목들을 선택할때 까지 반복
         success = false;
@@ -123,8 +124,9 @@ public class CampManagementApplication {
             System.out.print("등록할 과목 입력(숫자/띄어쓰기): ");
             String[] subject = sc.nextLine().split(" ");
 
-            try {
+            try{
                 int[] subjectId = Arrays.stream(subject).mapToInt(Integer::parseInt).toArray();
+                Student student =new Student(studentName,Student.stringToCondition(condition));
                 //학생 과목 등록
                 student.registerSubject(subjectId);
                 //조건 충족 판별
@@ -132,17 +134,18 @@ public class CampManagementApplication {
                     success = true;
                     //조건 충족 시 저장소에 저장
                     studentRepository.registerStudent(student);
+                    System.out.println("해당 수강생의 ID는 "+student.getId()+"입니다.");
                 } else {
                     //조건 불충족 시 등록 한 과목 삭제
                     student.subjectListClear();
                     System.out.println("수강생 등록 실패. 최소 3개 이상의 필수 과목과 2개 이상의 선택 과목을 입력하세요.");
                 }
-            } catch (Exception e) {
-                System.out.println("과목은 숫자로 입력하시고 각 과목을 띄어쓰기로 구분해주세요");
+            }catch(Exception e) {
+                e.toString();
             }
+
         }
         System.out.println("수강생 등록 성공!");
-        System.out.println("해당 수강생의 ID는 "+student.getId()+"입니다.");
     }
 
 
@@ -194,47 +197,83 @@ public class CampManagementApplication {
 
     //수강생 정보 삭제
     private static void deleteStudent(){
-        System.out.println("수강생 ID를 입력하세요:");
-        int studentId = sc.nextInt();
-        System.out.println("ID: "+studentRepository.getStudentById(studentId).getId());
-        System.out.print("Name: "+studentRepository.getStudentById(studentId).getName());
-        System.out.print("해당 수강생을 삭제하시겠습니까?(Y/N):");
-        String choice = sc.next();
-        if (choice.equals("Y")) {
-            studentRepository.removeStudentById(studentId);
-            System.out.println("수강생 삭제 완료!");
-        } else if (choice.equals("N")) {
-            System.out.println("삭제 취소");
+        boolean success = false;
+        while(!success){
+            try {
+                System.out.print("수강생 ID를 입력하세요:");
+                int studentId = sc.nextInt();
+
+                System.out.println("ID: " + studentRepository.getStudentById(studentId).getId());
+                System.out.print("Name: " + studentRepository.getStudentById(studentId).getName());
+                System.out.print("해당 수강생을 삭제하시겠습니까?(Y/N):");
+                String choice = sc.next();
+                if (choice.equals("Y")) {
+                    studentRepository.removeStudentById(studentId);
+                    System.out.println("수강생 삭제 완료!");
+                    success = true;
+                } else if (choice.equals("N")) {
+                    System.out.println("삭제 취소");
+                    success = true;
+                } else {
+                    System.out.println("Y또는 N을 입력하세요");
+                }
+            } catch (InputMismatchException e) {
+                sc.nextLine();
+                System.out.println("ID는 숫자로 입력하세요");
+            } catch (NullPointerException e) {
+                System.out.println("입력하신 ID가 존재하지 않습니다.");
+            }
         }
+
     }
 
     //수강생 정보 수정
     public static void updateStudent() {
-        System.out.print("수강생의 ID를 입력하세요:");
-        int studentId = sc.nextInt();
+        boolean success = false;
+        while(!success) {
+            try{
+                System.out.print("수강생의 ID를 입력하세요:");
+                int studentId = sc.nextInt();
 
-        System.out.println("수강생 이름: "+studentRepository.findById(studentId).getName());
-        System.out.println("수강생 상태: "+studentRepository.findById(studentId).getCondition().name());
+                System.out.println("수강생 이름: "+studentRepository.findById(studentId).getName());
+                System.out.println("수강생 상태: "+studentRepository.findById(studentId).getCondition().name());
 
-        System.out.print("수정할 것을 입력하세요(1.이름 2.상태):");
-        int choice = sc.nextInt();
+                System.out.print("수정할 것을 입력하세요(1.이름 2.상태):");
+                int choice = sc.nextInt();
 
-        sc.nextLine();
-        switch (choice) {
-            case 1 -> {
-                System.out.print("변경할 이름을 입력하세요:");
-                String studentName = sc.nextLine();
-                studentRepository.findById(studentId).setName(studentName);
-                System.out.println("이름 변경 성공!");
+                sc.nextLine();
+                switch (choice) {
+                    case 1 -> {
+                        System.out.print("변경할 이름을 입력하세요:");
+                        String studentName = sc.nextLine();
+                        studentRepository.findById(studentId).setName(studentName);
+                        System.out.println("이름 변경 성공!");
+                        success = true;
+                    }
+                    case 2 -> {
+                        System.out.println("1.Green 2.Red 3.Yellow");
+                        System.out.print("변경할 상태를 입력하세요:");
+                        int condition = sc.nextInt();
+                        if (condition == 1 || condition == 2 || condition == 3) {
+                            studentRepository.findById(studentId).chageConditionByNum(condition);
+                            System.out.println("상태 변경 성공!");
+                            success = true;
+                        } else {
+                            System.out.println("1 2 3 중 하나를 입력하세요.");
+                        }
+
+                    }
+                    case 3 -> System.out.println("1.이름 또는 2.상태를 입력하세요");
+                }
+            } catch (InputMismatchException e) {
+                sc.nextLine();
+                System.out.println("숫자를 입력하세요.");
+            } catch (NullPointerException e) {
+                System.out.println("입력한 ID가 없습니다.");
             }
-            case 2 -> {
-                System.out.println("1.Green 2.Red 3.Yellow");
-                System.out.print("변경할 상태를 입력하세요:");
-                int condition = sc.nextInt();
-                studentRepository.findById(studentId).chageConditionByNum(condition);
-                System.out.println("상태 변경 성공!");
-            }
+
         }
+
     }
     //수강생 정보 관리
     public static void manageStudent() {
